@@ -17,13 +17,19 @@
 					<form th:action="@{/alertas/{id} (id=${alerta.id})}"
 						th:object="${alerta}" method="POST">
 						<div class="form-group">
-							<label>Color</label> <input type="text" name="color"
+							<label>Color</label> 
+							<input type="text" name="color"
 								th:field="*{color}" class="form-control"
 								placeholder="Ingresar color" />
 						</div>
 						<div class="form-group">
-							<label>Duraci&oacute;n</label> <input type="text"
-								name="duracion" th:field="*{duracion}" class="form-control"
+							<label>Duraci&oacute;n desde</label> <input type="text"
+								name="duracionDesde" th:field="*{duracionDesde}" class="form-control"
+								placeholder="Ingresar duraci&oacute;n" />
+						</div>
+						<div class="form-group">
+							<label>Duraci&oacute;n hasta</label> <input type="text"
+								name="duracionHasta" th:field="*{duracionHasta}" class="form-control"
 								placeholder="Ingresar duraci&oacute;n" />
 						</div>
 						<div class="form-group">
@@ -40,5 +46,6 @@
 			</div>
 		</div>
 	</div>
+	<html xmlns:th="http://www.thymeleaf.org">
 </body>
 </html>

@@ -22,6 +22,8 @@ public interface IUsuarioService extends UserDetailsService {
 	Usuario saveUsuario(Usuario usuario);
 
 	Usuario getUsuarioById(Long id);
+	
+	Usuario getUsuarioByEmail(String email);
 
 	Usuario updateUsuario(Usuario usuario);
 

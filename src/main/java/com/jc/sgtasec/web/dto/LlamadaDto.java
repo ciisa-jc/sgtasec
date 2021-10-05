@@ -1,11 +1,10 @@
 package com.jc.sgtasec.web.dto;
 
-import java.util.Date;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import com.googlecode.jmapper.annotations.JGlobalMap;
+import java.time.LocalDateTime;
+import com.googlecode.jmapper.annotations.JMap;
 import com.jc.sgtasec.model.Atencion;
+import com.jc.sgtasec.model.TipoAtencion;
+import com.jc.sgtasec.model.Turno;
 import com.jc.sgtasec.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,14 +13,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JGlobalMap
 public class LlamadaDto {
 	
+	@JMap
 	private Long id;
+	
+	@JMap("usuario")
 	private Usuario usuario;
+	
+	@JMap("atencion")
 	private Atencion atencion;
 	
-	@Temporal(TemporalType.DATE)
-    Date fechaCreacion;	
-
+	@JMap("fechaCreacion")
+	private LocalDateTime fechaCreacion;
+	
+	private Turno turno;
+	
+	private TipoAtencion tipoAtencion;
 }

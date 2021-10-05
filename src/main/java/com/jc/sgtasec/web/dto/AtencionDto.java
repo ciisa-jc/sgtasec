@@ -19,6 +19,8 @@ public class AtencionDto {
 	private Turno turno;
 	private Cliente cliente;
 	private TipoAtencion tipoAtencion;
+	private long contadorLlamados;
 	private LocalDateTime fechaCreacion;	
+	private LocalDateTime fechaCreacionLlamada;	
 
 }

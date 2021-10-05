@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>Administrador de Llamadas</title>
+<!--/*/ <th:block th:include="fragments/general.html :: headerfiles">
+        </th:block> /*/-->
 </head>
 <body>
+	<div th:replace="fragments/navbar"></div>
+	<div class="container">
+		<div class="row">
+			<h1>Llamadas</h1>
+		</div>
 
-</body>
+	<table class="table table-striped table-bordered">
+	<thead class="table-dark">
+	<tr> 
+		<th> Turno </th>
+		<th> Usuario </th>
+		<th> fecha llamada </th>	
+		<th> Tipo de atención </th>	
+	</tr>
+	</thead>
+	
+	<tbody>
+	<tr th:each="llamada: ${llamadas}">
+		<td th:text="${llamada.turno.turnoAtencion}"> </td> 
+		<td th:text="|${llamada.usuario.nombre} ${llamada.usuario.apellidoMaterno} ${llamada.usuario.apellidoMaterno}|"> </td> 
+		<td th:text="${#temporals.format(llamada.fechaCreacion, 'dd-MMM-yyyy HH:mm:ss')}"> </td>
+		<td th:text="${llamada.tipoAtencion.nombre}"> </td> 
+
+	</tr>
+	</tbody>
+	
+	</table>
+
+
+
+	</div>
+<html xmlns:th="http://www.thymeleaf.org"></body>
 </html>

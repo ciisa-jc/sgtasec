@@ -7,10 +7,14 @@ import com.jc.sgtasec.web.dto.AtencionDto;
 
 public interface IAtencionService {
 	List<Atencion> getAllAtenciones();
+	
+	List<Atencion> getAtencionesConCantidadDeLlamadas();
 
 	Atencion saveAtencion(Atencion atencion);
 
 	Atencion getAtencionById(Long id);
+	
+	Atencion findByClienteEmail(String email);
 
 	Atencion updateAtencion(Atencion atencion);
 

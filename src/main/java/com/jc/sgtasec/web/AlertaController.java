@@ -69,7 +69,8 @@ public class AlertaController {
 		Alerta existingAlerta = alertaService.getAlertaById(id);
 		//existingAlerta.setId(id);
 		existingAlerta.setColor(alertaDto.getColor());
-		existingAlerta.setDuracion(alertaDto.getDuracion());
+		existingAlerta.setDuracionDesde(alertaDto.getDuracionDesde());
+		existingAlerta.setDuracionHasta(alertaDto.getDuracionHasta());
 		existingAlerta.setDescripcion(alertaDto.getDescripcion());
 		existingAlerta.setFechaCreacion(LocalDateTime.now());
 				

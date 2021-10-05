@@ -24,7 +24,7 @@ public class TurnoServiceImpl implements ITurnoService {
 	}
 
 	@Override
-	public List<Turno> getAllTurnos() {		
+	public List<Turno> getAllTurnos() {			
 		return turnoRepository.findAll();
 	}
 
@@ -70,6 +70,11 @@ public class TurnoServiceImpl implements ITurnoService {
 			listDTO.add(mapperToDTO(turno));
 		}
 		return listDTO;
+	}
+
+	@Override
+	public Turno getTurnoDisponible() {
+		return turnoRepository.getDisponible();
 	}
 
 }

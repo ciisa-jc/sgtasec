@@ -40,7 +40,13 @@ public class Atencion {
 	@JoinColumn(name = "id_tipo_atencion", referencedColumnName = "id")
 	private TipoAtencion tipoAtencion;	
 	
-	@Column(name = "fecha_creacion")
+	@Column(name = "contador_llamados")	
+	private long contadorLlamados;
+	
+	@Column(name = "fecha_creacion", nullable = false)
 	private LocalDateTime fechaCreacion;
+
+	@Column(name = "fecha_creacion_llamada")
+	private LocalDateTime fechaCreacionLlamada;
 	
 }

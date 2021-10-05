@@ -1,3 +1,4 @@
+m
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -7,53 +8,43 @@
         </th:block> /*/-->
 </head>
 <body>
-<div th:replace="fragments/navbar"></div>
+	<div th:replace="fragments/navbar"></div>
 	<div class="container">
-	<div class="row">
-	<div class="col-lg-6 col-md-6 col-sm-6 container justifyu-content-center card">
-	<h1 class="text-center">Crear nueva Alerta</h1>
-	<div class="card-body">
-	<form th:action="@{/alertas}" th:object="${alerta}" method="POST">
-		<div class="form-group">
-		<label>Color</label>
-		<input 
-		type="text"
-		name="color"
-		th:field="*{color}"
-		class="form-control"
-		placeholder="Ingresar Color"		
-		/> 		
+		<div class="row">
+			<div
+				class="col-lg-6 col-md-6 col-sm-6 container justifyu-content-center card">
+				<h1 class="text-center">Crear nueva Alerta</h1>
+				<div class="card-body">
+					<form th:action="@{/alertas}" th:object="${alerta}" method="POST">
+						<div class="form-group">
+							<label>Color</label> <input type="text" name="color"
+								th:field="*{color}" class="form-control"
+								placeholder="Ingresar Color" />
+						</div>
+						<div class="form-group">
+							<label>Duraci&oacute;n desde</label> <input type="text"
+								name="duracionDesde" th:field="*{duracionDesde}"
+								class="form-control"
+								placeholder="Ingresar Duraci&oacute;n en minutos" />
+							<div class="form-group">
+								<label>Duraci&oacute;n hasta</label> <input type="text"
+									name="duracionHasta" th:field="*{duracionHasta}"
+									class="form-control"
+									placeholder="Ingresar Duraci&oacute;n en minutos" />
+							</div>
+							<div class="form-group">
+								<label>Descripci&oacute;n</label> <input type="text"
+									name="descripcion" th:field="*{descripcion}"
+									class="form-control" placeholder="Ingresar Descripci&oacute;n" />
+							</div>
+							<div class="box-footer">
+								<button type="submit" class="btn btn-primary">Enviar</button>
+							</div>
+					</form>
+				</div>
+			</div>
 		</div>
-		<div class="form-group">
-		<label>Duraci&oacute;n</label>
-		<input 
-		type="text"
-		name="duracion"
-		th:field="*{duracion}"
-		class="form-control"
-		placeholder="Ingresar Duraci&oacute;n en minutos"		
-		/> 		
-		</div>		
-		<div class="form-group">
-		<label>Descripci&oacute;n</label>
-		<input 
-		type="text"
-		name="descripcion"
-		th:field="*{descripcion}"
-		class="form-control"
-		placeholder="Ingresar Descripci&oacute;n"		
-		/> 		
-		</div>					
-		<div class="box-footer">
-		<button type="submit" class="btn btn-primary">
-		Enviar
-		</button>
-		</div>
-				
-	</form>
 	</div>
-	</div> 
-	</div> 
-	</div>
+<html xmlns:th="http://www.thymeleaf.org">
 </body>
 </html>

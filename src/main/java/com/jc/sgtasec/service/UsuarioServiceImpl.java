@@ -110,7 +110,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		 
 		 return esAdmin;
 	}
-	
+		
 	
 	// crud
 
@@ -161,6 +161,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			listDTO.add(mapperToDTO(usuario));
 		}
 		return listDTO;
+	}
+
+	@Override
+	public Usuario getUsuarioByEmail(String email) {
+		return usuarioRepository.findByEmail(email);
 	}
 
 }

@@ -72,4 +72,5 @@ public class AlertaServiceImpl implements IAlertaService {
 		return listDTO;
 	}
 
+
 }

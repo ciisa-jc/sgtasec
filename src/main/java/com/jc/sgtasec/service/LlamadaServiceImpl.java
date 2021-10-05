@@ -3,9 +3,13 @@ package com.jc.sgtasec.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import com.googlecode.jmapper.JMapper;
+import com.jc.sgtasec.model.Atencion;
 import com.jc.sgtasec.model.Llamada;
 import com.jc.sgtasec.repository.ILlamadaRepository;
 import com.jc.sgtasec.web.dto.LlamadaDto;
@@ -13,6 +17,8 @@ import com.jc.sgtasec.web.dto.LlamadaDto;
 @Service
 public class LlamadaServiceImpl implements ILlamadaService {
 	
+	private Logger logger = LogManager.getLogger(getClass());
+	private Authentication auth;
 	private ILlamadaRepository llamadaRepository;
 	private JMapper<Llamada, LlamadaDto> mapperToEntity;
 	private JMapper<LlamadaDto, Llamada> mapperToDTO;
@@ -31,6 +37,11 @@ public class LlamadaServiceImpl implements ILlamadaService {
 
 	@Override
 	public Llamada saveLlamada(Llamada llamada) {
+		
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("saveLlamada(Llamada llamada): " + llamada);
+		
 		return llamadaRepository.save(llamada);
 	}
 
@@ -71,6 +82,16 @@ public class LlamadaServiceImpl implements ILlamadaService {
 			listDTO.add(mapperToDTO(llamada));
 		}
 		return listDTO;
+	}
+
+	@Override
+	public List<Llamada> findByAtencion(Atencion atencion) {
+		return llamadaRepository.findByAtencion(atencion);
+	}
+
+	@Override
+	public List<Llamada> listaLlamadasConTurnos() {
+		return llamadaRepository.listaLlamadasConTurnos();
 	}
 
 }

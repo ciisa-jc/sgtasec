@@ -16,7 +16,8 @@ public class AlertaDto {
 
 	private Long id;
 	private String color;
-	private Integer duracion;
+	private Integer duracionDesde;
+	private Integer duracionHasta;
 	private String descripcion;
 	private LocalDateTime fechaCreacion;
 }

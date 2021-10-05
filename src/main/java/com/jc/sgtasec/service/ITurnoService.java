@@ -17,9 +17,12 @@ public interface ITurnoService {
 
 	void deleteTurnoById(Long id);
 	
+	Turno getTurnoDisponible();
+	
 	Turno mapperToEntity(TurnoDto source);
 	
 	TurnoDto mapperToDTO(Turno source);
 	
 	List<TurnoDto> getListDTO(List<Turno> lista);
+	
 }

@@ -23,7 +23,8 @@
 	<thead class="table-dark">
 	<tr> 
 		<th> Color</th>
-		<th> Duraci&oacute;n</th>
+		<th> Duraci&oacute;n desde</th>
+		<th> Duraci&oacute;n hasta</th>
 		<th> Descripci&oacute;n</th>
 		<th> Fecha</th>
 		<th>Acciones</th>		
@@ -33,7 +34,8 @@
 	<tbody>
 	<tr th:each="alerta: ${alertas}">
 		<td th:text="${alerta.color}"> </td> 
-		<td th:text="${alerta.duracion}"> </td> 
+		<td th:text="${alerta.duracionDesde}"> </td> 
+		<td th:text="${alerta.duracionHasta}"> </td> 
 		<td th:text="${alerta.descripcion}"> </td>
 		<td th:text="${#temporals.format(alerta.fechaCreacion, 'dd-MM-yyyy HH:mm')}"> </td>
 		<td>
@@ -49,5 +51,6 @@
 	</table>
 	
 </div>
+<html xmlns:th="http://www.thymeleaf.org">
 </body>
 </html>

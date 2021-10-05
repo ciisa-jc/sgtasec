@@ -30,12 +30,15 @@ public class Alerta {
 	@Column(name = "color", unique = true, nullable = false, length = 50)
 	private String color;
 
-	@Column(name = "duracion", nullable = false, length = 4)
-	private Integer duracion;
+	@Column(name = "duracion_desde", nullable = false)
+	private Integer duracionDesde;
+
+	@Column(name = "duracion_hasta", nullable = false)
+	private Integer duracionHasta;
 
 	@Column(name = "descripcion", nullable = false, length = 255)
 	private String descripcion;
 
-	@Column(name = "fecha_creacion")
+	@Column(name = "fecha_creacion", nullable = false)
 	private LocalDateTime fechaCreacion;
 }

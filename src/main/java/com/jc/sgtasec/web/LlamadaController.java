@@ -22,16 +22,34 @@ public class LlamadaController {
 		super();
 		this.llamadaService = llamadaService;
 	}
-		
+//		
+//	@GetMapping("/llamadas")
+//	public String listLlamadas(Model model) {
+//		List<LlamadaDto> listLlamadasDto = new ArrayList<LlamadaDto>();
+//		
+//		for (Llamada llamada : llamadaService.getAllLlamadas()) {
+//			listLlamadasDto.add(llamadaService.mapperToDTO(llamada));
+//		}
+//		
+//		model.addAttribute("llamadas", listLlamadasDto);
+//		return "llamadas/llamadas";
+//	}
+	
 	@GetMapping("/llamadas")
-	public String listLlamadas(Model model) {
+	public String listaLlamadasConTurnos(Model model) {
 		List<LlamadaDto> listLlamadasDto = new ArrayList<LlamadaDto>();
 		
-		for (Llamada llamada : llamadaService.getAllLlamadas()) {
-			listLlamadasDto.add(llamadaService.mapperToDTO(llamada));
+		for (Llamada llamada : llamadaService.listaLlamadasConTurnos()) {
+			LlamadaDto llamadaDto = llamadaService.mapperToDTO(llamada);
+			
+			llamadaDto.setTurno(llamada.getAtencion().getTurno());
+			llamadaDto.setTipoAtencion(llamada.getAtencion().getTipoAtencion());
+			
+			listLlamadasDto.add(llamadaDto);
 		}
 		
 		model.addAttribute("llamadas", listLlamadasDto);
+		
 		return "llamadas/llamadas";
 	}
 
@@ -42,12 +60,8 @@ public class LlamadaController {
 		return "llamadas/crear_llamada";
 	}
 
-	@PostMapping("/llamadas")
-	public String saveLlamada(@ModelAttribute("llamada") LlamadaDto llamadaDto) {
-		Llamada llamada = llamadaService.mapperToEntity(llamadaDto);
-
+	public void saveLlamada(Llamada llamada) {
 		llamadaService.saveLlamada(llamada);
-		return "redirect:/llamadas";
 	}
 
 	@GetMapping("/llamadas/editar/{id}")
