@@ -23,5 +23,7 @@ public class RestAtencionDto {
 	private Collection<Alerta> alertas;
 	
 	private Long cantidadMaximaLlamadas;
+	
+	private int tiempoEstimadoParaAtencion;
 
 }
