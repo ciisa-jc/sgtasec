@@ -43,33 +43,24 @@ public class RestAtencionController {
 	public RestAtencionDto getAtencionByEmail(@PathVariable String email) {	
 		RestAtencionDto restAtencionDto = new RestAtencionDto();				
 		Collection<Alerta> alertas = new ArrayList<Alerta>();
-
 		restAtencionDto.setEmailRecibido(email);		
 		Atencion atencion = atencionService.findByClienteEmail(email);
 				
-		if (atencion != null) {
-				
+		if (atencion != null) {				
 			AtencionDto atencionDto = atencionService.mapperToDTO(atencion);
 			atencionDto.setContadorLlamados(llamadaService.findByAtencion(atencion).size());			
 			restAtencionDto.setAtencion(atencionDto);		
-			restAtencionDto.setFechaCreacion(LocalDateTime.now());
+			//restAtencionDto.setFechaCreacion(LocalDateTime.now());
 			restAtencionDto.setCantidadMaximaLlamadas(customProperties.getCantidadMaximaLlamadas());
-			
-			
-			
-			
-			
+						
 			for (Alerta alerta : alertaService.getAllAlertas()) {
 					alertas.add(alerta);
 			}	
 			
-			restAtencionDto.setAlertas(alertas);
-					
+			restAtencionDto.setAlertas(alertas);					
 			logger.debug("getAtencionByEmail(@PathVariable String email) : " + email);
 		}
 		
 		return restAtencionDto;
-	}
-
-		
+	}		
 }
