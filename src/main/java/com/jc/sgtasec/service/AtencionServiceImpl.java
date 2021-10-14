@@ -115,4 +115,13 @@ public class AtencionServiceImpl implements IAtencionService {
 		return atencionRepository.findByClienteEmail(email);
 	}
 
+	@Override
+	public Long tiempoEstimadoParaAtencion(Long idAtencion) {
+		return atencionRepository.tiempoEstimadoParaAtencion(idAtencion);
+	}
+
+
+
+
+
 }

@@ -24,6 +24,6 @@ public class RestAtencionDto {
 	
 	private Long cantidadMaximaLlamadas;
 	
-	private int tiempoEstimadoParaAtencion;
+	private Long tiempoEstimadoParaAtencion;
 
 }

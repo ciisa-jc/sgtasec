@@ -6,6 +6,9 @@ import com.jc.sgtasec.model.Atencion;
 import com.jc.sgtasec.web.dto.AtencionDto;
 
 public interface IAtencionService {
+	
+	Long tiempoEstimadoParaAtencion(Long idAtencion);
+	
 	List<Atencion> getAllAtenciones();
 	
 	List<Atencion> getAtencionesConCantidadDeLlamadas();
