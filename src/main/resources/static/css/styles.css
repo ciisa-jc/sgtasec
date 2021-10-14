@@ -4,3 +4,6 @@ table {
 	font-size: 0.8em;
 }
 
+.btn-group-sm>.btn, .btn-sm {
+	font-size: 0.8em;
+}
