@@ -58,10 +58,13 @@
 					<td th:text="${atencion.contadorLlamados}"></td>
 					<td
 						th:text="${#temporals.format(atencion.fechaCreacionLlamada, 'dd-MM-yyyy HH:mm:ss')}"></td>
-					<td><a th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}"
-						class="btn btn-primary btn-sm"> Llamar</a> <a
-						th:href="@{/atenciones/{id}(id=${atencion.id})}"
-						class="btn btn-danger btn-sm"> Borrar</a></td>
+					<td><span><a th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}"
+						class="btn btn-primary btn-sm"> Llamar</a></span>
+						<span><a th:href="@{/atenciones/{id}(id=${atencion.id})}"
+						class="btn btn-danger btn-sm"> Borrar</a></span>
+						<span><a th:href="@{/atenciones/atender/{id}(id=${atencion.id})}"
+						class="btn btn-secondary btn-sm"> Atender</a></span>
+						</td>
 				</tr>
 			</tbody>
 
