@@ -1,67 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Administrador de Atenciones</title>
 <!--/*/ <th:block th:include="fragments/general.html :: headerfiles">
         </th:block> /*/-->
 </head>
 <body>
-<div th:replace="fragments/navbar"></div>
-<div class="container">
-	<div class="row">
-		<h1>Lista de Atenciones</h1>
-	</div>
-	
-	<div class="row">
-	<div class="col-lg-3">
-		<a th:href="@{/atenciones/nuevo}" class="btn btn-primary btn-sm mb-3">Agregar Atención</a>
-	</div>
-	</div>
-	
-	<table class="table table-striped table-bordered">
-	<thead class="table-dark">
-	<tr> 
-		<th> Turno </th>
-		<th> Estado </th>
-		<th> Rut Cliente</th>
-		<th> Cliente</th>
-		<th> Tipo Atención</th>
-		<th> Registro Atención</th>
-		<th> Llamadas</th>
-		<th> Fecha de llamada</th>
-		<th>Acciones</th>		
-	</tr>
-	</thead>
-	
-	<tbody>
-	<tr th:each="atencion: ${atenciones}">
-		<td th:text="${atencion.turno.getTurnoAtencion()}"> </td> 
-		<div th:switch="${atencion.turno.getEstado()}">
-			<td th:case="1">Asignado</td>
-			<td th:case="2">En atención</td>
-			<td th:case="3">Finalizado</td>
-			<td th:case="4">Descartado</td>
+	<div th:replace="fragments/navbar"></div>
+	<div class="container">
+		<div class="row">
+			<h1>Lista de Atenciones</h1>
 		</div>
-		<td th:text="${atencion.cliente.rut}"> </td> 
-		<td th:text="|${atencion.cliente.nombre}  ${atencion.cliente.apellidoPaterno}  ${atencion.cliente.apellidoMaterno}|"> </td> 
-		<td th:text="${atencion.tipoAtencion.nombre}"> </td>
-		<td th:text="${#temporals.format(atencion.fechaCreacion, 'dd-MM-yyyy HH:mm:ss')}"> </td>
-		<td th:text="${atencion.contadorLlamados}"></td>
-		<td th:text="${#temporals.format(atencion.fechaCreacionLlamada, 'dd-MM-yyyy HH:mm:ss')}"></td>
-		<td>			 
-			<a th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}" 
-			class="btn btn-primary btn-sm"> Llamar</a> 
-			
-			<a th:href="@{/atenciones/{id}(id=${atencion.id})}" 
-			class="btn btn-danger btn-sm"> Borrar</a> 
-		</td>
-	</tr>
-	</tbody>
-	
-	</table>
-	
-</div>
-<html xmlns:th="http://www.thymeleaf.org">
+
+		<div class="row">
+			<div class="col-lg-3">
+				<a th:href="@{/atenciones/nuevo}"
+					class="btn btn-primary btn-sm mb-3">Agregar Atención</a>
+			</div>
+		</div>
+
+		<table class="table table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>Turno</th>
+					<th>Estado</th>
+					<th>Rut Cliente</th>
+					<th>Cliente</th>
+					<th>Correo</th>
+					<th>Tipo Atención</th>
+					<th>Registro Atención</th>
+					<th>Llamadas</th>
+					<th>Fecha de llamada</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="atencion: ${atenciones}">
+					<td th:text="${atencion.turno.getTurnoAtencion()}"></td>
+					<div th:switch="${atencion.turno.getEstado()}">
+						<td th:case="1">Asignado</td>
+						<td th:case="2">En atención</td>
+						<td th:case="3">Finalizado</td>
+						<td th:case="4">Descartado</td>
+					</div>
+					<td th:text="${atencion.cliente.rut}"></td>
+					<td
+						th:text="|${atencion.cliente.nombre}  ${atencion.cliente.apellidoPaterno}  ${atencion.cliente.apellidoMaterno}|">
+					</td>
+					<td th:text="${atencion.cliente.email}"></td>
+					<td th:text="${atencion.tipoAtencion.nombre}"></td>
+					<td
+						th:text="${#temporals.format(atencion.fechaCreacion, 'dd-MM-yyyy HH:mm:ss')}">
+					</td>
+					<td th:text="${atencion.contadorLlamados}"></td>
+					<td
+						th:text="${#temporals.format(atencion.fechaCreacionLlamada, 'dd-MM-yyyy HH:mm:ss')}"></td>
+					<td><a th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}"
+						class="btn btn-primary btn-sm"> Llamar</a> <a
+						th:href="@{/atenciones/{id}(id=${atencion.id})}"
+						class="btn btn-danger btn-sm"> Borrar</a></td>
+				</tr>
+			</tbody>
+
+		</table>
+
+	</div>
+	<div th:replace="fragments/footer"></div>
 </body>
 </html>
