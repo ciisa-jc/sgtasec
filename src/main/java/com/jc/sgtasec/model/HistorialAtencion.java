@@ -8,9 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import com.googlecode.jmapper.annotations.JGlobalMap;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,28 +31,28 @@ public class HistorialAtencion {
 	@Column(name = "fecha_creacion_atencion")
 	private LocalDateTime fechaCreacionAtencion; 
 	
-	@Column(name = "apellido_paterno_cliente")
+	@Column(name = "apellido_paterno_cliente", length = 50)
 	private String apellidoPaternoCliente; 
 	
-	@Column(name = "apellido_materno_cliente")
+	@Column(name = "apellido_materno_cliente", length = 50)
 	private String apellidoMaternoCliente; 
 	
-	@Column(name = "nombre_cliente")
+	@Column(name = "nombre_cliente", length = 50)
 	private String nombreCliente;
 	
-	@Column(name = "email_cliente")
+	@Column(name = "email_cliente", length = 50)
 	private String emailCliente;
 	
-	@Column(name = "rut_cliente")
+	@Column(name = "rut_cliente", length = 50)
 	private String rutCliente; 
 	
-	@Column(name = "nombre_tipo_atencion")
+	@Column(name = "nombre_tipo_atencion", length = 50)
 	private String nombreTipoAtencion; 
 	
 	@Column(name = "tiempo_atencion")
 	private int tiempoAtencion; 
 	
-	@Column(name = "turno_atencion")
+	@Column(name = "turno_atencion", length = 50)
 	private String turnoAtencion; 
 	
 	@Column(name = "fecha_creacion_llamada")

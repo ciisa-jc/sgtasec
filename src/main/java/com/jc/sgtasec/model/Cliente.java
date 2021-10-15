@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,19 +23,19 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "nombre", nullable = false)
+	@Column(name = "nombre", nullable = false, length = 50)
 	private String nombre;
 	
-	@Column(name = "apellido_paterno", nullable = false)
+	@Column(name = "apellido_paterno", nullable = false, length = 50)
 	private String apellidoPaterno;
 	
 	@Column(name = "apellido_materno")
 	private String apellidoMaterno;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", unique = true, nullable = false, length = 50)
 	private String email;
 	
-	@Column(name = "rut", nullable = false)
-	private String rut;
+	@Column(name = "rut", unique = true, nullable = false, length = 50)
+    private String rut;
 
 }

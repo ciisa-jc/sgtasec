@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Home</title>
-<!--/*/ <th:block th:include="fragments/general.html :: headerfiles">
-        </th:block> /*/-->
+<!--/*/ <th:block th:include="fragments/general.html :: headerfiles"></th:block> /*/-->
 </head>
 <body>
 	<div th:replace="fragments/navbar"></div>
@@ -14,8 +14,9 @@
 		<p>
 			Bienvenido <span sec:authentication="principal.username">
 				Usuario</span>
-		</p>
-
+				
+		<div sec:authorize="hasAuthority('ADMIN_ROLE')">Contenido sólo para administradores.</div>
+		
 	</div>
 	<div th:replace="fragments/footer"></div>
 </body>

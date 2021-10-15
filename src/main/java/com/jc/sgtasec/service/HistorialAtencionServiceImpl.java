@@ -3,6 +3,10 @@ package com.jc.sgtasec.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.jmapper.JMapper;
@@ -13,6 +17,8 @@ import com.jc.sgtasec.web.dto.HistorialAtencionDto;
 @Service
 public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 	
+	private Logger logger = LogManager.getLogger(getClass());
+	private Authentication auth;
 	private IHistorialAtencionRepository atencionRepository;
 	private JMapper<HistorialAtencion, HistorialAtencionDto> mapperToEntity;
 	private JMapper<HistorialAtencionDto, HistorialAtencion> mapperToDTO;
@@ -32,6 +38,9 @@ public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 
 	@Override
 	public HistorialAtencion saveHistorialAtencion(HistorialAtencion historialAtencion) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("saveHistorialAtencion(HistorialAtencion historialAtencion) " + historialAtencion.toString());
 		return atencionRepository.save(historialAtencion);
 	}
 
@@ -42,11 +51,17 @@ public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 
 	@Override
 	public HistorialAtencion updateHistorialAtencion(HistorialAtencion historialAtencion) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("updateHistorialAtencion(HistorialAtencion historialAtencion) " + historialAtencion.toString());
 		return atencionRepository.save(historialAtencion);
 	}
 
 	@Override
 	public void deleteHistorialAtencionById(Long id) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("deleteHistorialAtencionById(Long id) " + id);
 		atencionRepository.deleteById(id);		
 	}
 

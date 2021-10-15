@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <title>Administrador de Clientes</title>
@@ -20,26 +21,35 @@
 							<label>Nombre</label> <input type="text" name="nombre"
 								th:field="*{nombre}" class="form-control"
 								placeholder="Ingresar Nombre" />
+							<div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+								th:errors="*{nombre}"></div>
 						</div>
 						<div class="form-group">
 							<label>Apellido Paterno</label> <input type="text"
-								name="apellidoPaterno" th:field="*{apellidoPaterno}" class="form-control"
-								placeholder="Ingresar Apellido Paterno" />
+								name="apellidoPaterno" th:field="*{apellidoPaterno}"
+								class="form-control" placeholder="Ingresar Apellido Paterno" />
+							<div class="text-danger"
+								th:if="${#fields.hasErrors('apellidoPaterno')}"
+								th:errors="*{apellidoPaterno}"></div>
 						</div>
 						<div class="form-group">
 							<label>Apellido Materno</label> <input type="text"
-								name="apellidoMaterno" th:field="*{apellidoMaterno}" class="form-control"
-								placeholder="Ingresar Apellido Materno" />
+								name="apellidoMaterno" th:field="*{apellidoMaterno}"
+								class="form-control" placeholder="Ingresar Apellido Materno" />
 						</div>
 						<div class="form-group">
-							<label>Email</label> <input type="text"
-								name="email" th:field="*{email}"
-								class="form-control" placeholder="Ingresar Email" />
+							<label>Email</label> <input type="text" name="email"
+								th:field="*{email}" class="form-control"
+								placeholder="Ingresar Email" />
+							<div class="text-danger" th:if="${#fields.hasErrors('email')}"
+								th:errors="*{email}"></div>
 						</div>
 						<div class="form-group">
-							<label>Rut</label> <input type="text"
-								name="rut" th:field="*{rut}"
-								class="form-control" placeholder="Ingresar Rut" />
+							<label>Rut</label> <input type="text" name="rut"
+								th:field="*{rut}" class="form-control"
+								placeholder="Ingresar Rut" />
+							<div class="text-danger" th:if="${#fields.hasErrors('rut')}"
+								th:errors="*{rut}"></div>
 						</div>
 						<div class="box-footer">
 							<button type="submit" class="btn btn-primary">Enviar</button>
@@ -50,6 +60,6 @@
 			</div>
 		</div>
 	</div>
-	<html xmlns:th="http://www.thymeleaf.org">
+	<div th:replace="fragments/footer"></div>
 </body>
 </html>

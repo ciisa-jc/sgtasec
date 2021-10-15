@@ -3,8 +3,13 @@ package com.jc.sgtasec.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,32 +20,45 @@ import com.jc.sgtasec.web.dto.UsuarioDto;
 
 @Controller
 public class UsuarioController {
-	
-	private IUsuarioService usuarioService;	
-	
+
+	private Logger logger = LogManager.getLogger(getClass());
+	private IUsuarioService usuarioService;
+
 	public UsuarioController(IUsuarioService usuarioService) {
 		super();
 		this.usuarioService = usuarioService;
 	}
-	
+
 	@GetMapping("/usuarios")
 	public String listUsuarios(Model model) {
 		List<UsuarioDto> listUsuarioDto = new ArrayList<UsuarioDto>();
-		
+
 		for (Usuario usuario : usuarioService.getAllUsuarios()) {
 			listUsuarioDto.add(usuarioService.mapperToDTO(usuario));
 		}
-		
-		model.addAttribute("usuarios", usuarioService.getAllUsuarios());		
+
+		model.addAttribute("usuarios", usuarioService.getAllUsuarios());
 		return "usuarios/usuarios";
 	}
 
 	@PostMapping("/usuarios")
-	public String saveUsuario(@ModelAttribute("usuario") UsuarioDto usuarioDto) {
-		Usuario usuario = usuarioService.mapperToEntity(usuarioDto);
+	public String saveUsuario(@ModelAttribute("usuario") @Valid UsuarioDto usuarioDto, BindingResult result,
+			Model model) {
+		try {
 
-		usuarioService.saveUsuario(usuario);
-		return "redirect:/usuarios";
+			if (result.hasErrors()) {
+				return "usuarios/usuarios";
+			}
+
+			Usuario usuario = usuarioService.mapperToEntity(usuarioDto);
+			usuarioService.saveUsuario(usuario);
+			return "redirect:/usuarios";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@GetMapping("/usuarios/editar/{id}")
@@ -51,38 +69,54 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/usuarios/{id}")
-	public String updateUsuario(@PathVariable Long id, @ModelAttribute("usuario") UsuarioDto usuarioDto, Model model) {
-		
-		// Si el usuario es administrador no realiza cambios
-		if (usuarioService.esUsuarioAdministrador(id)) {
-			return "redirect:/usuarios";
-		}
+	public String updateUsuario(@PathVariable Long id, @ModelAttribute("usuario") @Valid UsuarioDto usuarioDto,
+			BindingResult result, Model model) {
+		try {
 
-		// get Usuario from database by id
-		Usuario existingUsuario = usuarioService.getUsuarioById(id);
-		// existingUsuario.setId(id);
-		existingUsuario.setNombre(usuarioDto.getNombre());
-		existingUsuario.setApellidoPaterno(usuarioDto.getApellidoPaterno());
-		existingUsuario.setApellidoMaterno(usuarioDto.getApellidoMaterno());
-		existingUsuario.setEmail(usuarioDto.getEmail());
-		existingUsuario.setRut(usuarioDto.getRut());
-		
-		// save updated Usuario object
-		usuarioService.updateUsuario(existingUsuario);
-		return "redirect:/usuarios";
+			if (result.hasErrors()) {
+				return "usuarios/editar_usuario";
+			}
+
+			// Si el usuario es administrador no realiza cambios
+			if (usuarioService.esUsuarioAdministrador(id)) {
+				return "redirect:/usuarios";
+			}
+
+			// get Usuario from database by id
+			Usuario existingUsuario = usuarioService.getUsuarioById(id);
+			// existingUsuario.setId(id);
+			existingUsuario.setNombre(usuarioDto.getNombre());
+			existingUsuario.setApellidoPaterno(usuarioDto.getApellidoPaterno());
+			existingUsuario.setApellidoMaterno(usuarioDto.getApellidoMaterno());
+			existingUsuario.setEmail(usuarioDto.getEmail());
+			existingUsuario.setRut(usuarioDto.getRut());
+
+			// save updated Usuario object
+			usuarioService.updateUsuario(existingUsuario);
+			return "redirect:/usuarios";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@GetMapping("/usuarios/{id}")
-	public String deleteUsuario(@PathVariable Long id) {
-		
-		// Si el usuario es administrador no lo elimina
-		if (!usuarioService.esUsuarioAdministrador(id)) {
-			usuarioService.deleteUsuarioById(id);
+	public String deleteUsuario(@PathVariable Long id, Model model) {
+		try {
+
+			// Si el usuario es administrador no lo elimina
+			if (!usuarioService.esUsuarioAdministrador(id)) {
+				usuarioService.deleteUsuarioById(id);
+			}
+
+			return "redirect:/usuarios";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
 		}
-		
-		return "redirect:/usuarios";
 	}
-
-	
-
 }

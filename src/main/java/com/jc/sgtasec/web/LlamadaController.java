@@ -3,6 +3,8 @@ package com.jc.sgtasec.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,40 +18,26 @@ import com.jc.sgtasec.web.dto.LlamadaDto;
 @Controller
 public class LlamadaController {
 
-	private ILlamadaService llamadaService; 
-	
+	private Logger logger = LogManager.getLogger(getClass());
+	private ILlamadaService llamadaService;
+
 	public LlamadaController(ILlamadaService llamadaService) {
 		super();
 		this.llamadaService = llamadaService;
 	}
-//		
-//	@GetMapping("/llamadas")
-//	public String listLlamadas(Model model) {
-//		List<LlamadaDto> listLlamadasDto = new ArrayList<LlamadaDto>();
-//		
-//		for (Llamada llamada : llamadaService.getAllLlamadas()) {
-//			listLlamadasDto.add(llamadaService.mapperToDTO(llamada));
-//		}
-//		
-//		model.addAttribute("llamadas", listLlamadasDto);
-//		return "llamadas/llamadas";
-//	}
-	
+
 	@GetMapping("/llamadas")
 	public String listaLlamadasConTurnos(Model model) {
 		List<LlamadaDto> listLlamadasDto = new ArrayList<LlamadaDto>();
-		
+
 		for (Llamada llamada : llamadaService.listaLlamadasConTurnos()) {
 			LlamadaDto llamadaDto = llamadaService.mapperToDTO(llamada);
-			
 			llamadaDto.setTurno(llamada.getAtencion().getTurno());
 			llamadaDto.setTipoAtencion(llamada.getAtencion().getTipoAtencion());
-			
 			listLlamadasDto.add(llamadaDto);
 		}
-		
+
 		model.addAttribute("llamadas", listLlamadasDto);
-		
 		return "llamadas/llamadas";
 	}
 
@@ -60,35 +48,52 @@ public class LlamadaController {
 		return "llamadas/crear_llamada";
 	}
 
-	public void saveLlamada(Llamada llamada) {
-		llamadaService.saveLlamada(llamada);
+	public void saveLlamada(Llamada llamada, Model model) {
+		try {
+			llamadaService.saveLlamada(llamada);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+		}
 	}
 
 	@GetMapping("/llamadas/editar/{id}")
 	public String editLlamadaForm(@PathVariable Long id, Model model) {
 
 		LlamadaDto llamadaDto = llamadaService.mapperToDTO(llamadaService.getLlamadaById(id));
-
 		model.addAttribute("llamada", llamadaDto);
 		return "llamadas/editar_llamada";
 	}
 
 	@PostMapping("/llamadas/{id}")
 	public String updateLlamada(@PathVariable Long id, @ModelAttribute("llamada") LlamadaDto llamadaDto, Model model) {
+		try {
 
-		Llamada existingLlamada = llamadaService.getLlamadaById(id);
-		existingLlamada.setAtencion(llamadaDto.getAtencion());
-		existingLlamada.setUsuario(llamadaDto.getUsuario());
-		existingLlamada.setFechaCreacion(llamadaDto.getFechaCreacion());
+			Llamada existingLlamada = llamadaService.getLlamadaById(id);
+			existingLlamada.setAtencion(llamadaDto.getAtencion());
+			existingLlamada.setUsuario(llamadaDto.getUsuario());
+			existingLlamada.setFechaCreacion(llamadaDto.getFechaCreacion());
+			llamadaService.updateLlamada(existingLlamada);
+			return "redirect:/llamadas";
 
-		llamadaService.updateLlamada(existingLlamada);
-		return "redirect:/llamadas";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@GetMapping("/llamadas/{id}")
-	public String deleteLlamada(@PathVariable Long id) {
-		llamadaService.deleteLlamadaById(id);
-		return "redirect:/llamadas";
+	public String deleteLlamada(@PathVariable Long id, Model model) {
+		try {
+			llamadaService.deleteLlamadaById(id);
+			return "redirect:/llamadas";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
-	
 }

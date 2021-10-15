@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SgtasecApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SgtasecApplication.class, args);	
+		SpringApplication.run(SgtasecApplication.class, args);
 	}
-
 }

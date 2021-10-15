@@ -2,11 +2,9 @@ package com.jc.sgtasec.web;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import com.jc.sgtasec.model.HistorialAtencion;
 import com.jc.sgtasec.service.IHistorialAtencionService;
 import com.jc.sgtasec.web.dto.HistorialAtencionDto;

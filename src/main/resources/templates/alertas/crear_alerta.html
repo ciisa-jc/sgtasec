@@ -1,6 +1,6 @@
-m
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <title>Administrador de Alertas</title>
@@ -20,31 +20,43 @@ m
 							<label>Color</label> <input type="text" name="color"
 								th:field="*{color}" class="form-control"
 								placeholder="Ingresar Color" />
+							<div class="text-danger" th:if="${#fields.hasErrors('color')}"
+								th:errors="*{color}"></div>
 						</div>
 						<div class="form-group">
 							<label>Duraci&oacute;n desde</label> <input type="text"
 								name="duracionDesde" th:field="*{duracionDesde}"
 								class="form-control"
 								placeholder="Ingresar Duraci&oacute;n en minutos" />
-							<div class="form-group">
-								<label>Duraci&oacute;n hasta</label> <input type="text"
-									name="duracionHasta" th:field="*{duracionHasta}"
-									class="form-control"
-									placeholder="Ingresar Duraci&oacute;n en minutos" />
-							</div>
-							<div class="form-group">
-								<label>Descripci&oacute;n</label> <input type="text"
-									name="descripcion" th:field="*{descripcion}"
-									class="form-control" placeholder="Ingresar Descripci&oacute;n" />
-							</div>
-							<div class="box-footer">
-								<button type="submit" class="btn btn-primary">Enviar</button>
-							</div>
+							<div class="text-danger"
+								th:if="${#fields.hasErrors('duracionDesde')}"
+								th:errors="*{duracionDesde}"></div>
+						</div>
+						<div class="form-group">
+							<label>Duraci&oacute;n hasta</label> <input type="text"
+								name="duracionHasta" th:field="*{duracionHasta}"
+								class="form-control"
+								placeholder="Ingresar Duraci&oacute;n en minutos" />
+							<div class="text-danger"
+								th:if="${#fields.hasErrors('duracionHasta')}"
+								th:errors="*{duracionHasta}"></div>
+						</div>
+						<div class="form-group">
+							<label>Descripci&oacute;n</label> <input type="text"
+								name="descripcion" th:field="*{descripcion}"
+								class="form-control" placeholder="Ingresar Descripci&oacute;n" />
+							<div class="text-danger"
+								th:if="${#fields.hasErrors('descripcion')}"
+								th:errors="*{descripcion}"></div>
+						</div>
+						<div class="box-footer">
+							<button type="submit" class="btn btn-primary">Enviar</button>
+						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-<html xmlns:th="http://www.thymeleaf.org">
+	<div th:replace="fragments/footer"></div>
 </body>
 </html>

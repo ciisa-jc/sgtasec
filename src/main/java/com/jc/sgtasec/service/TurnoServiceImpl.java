@@ -2,6 +2,11 @@ package com.jc.sgtasec.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.jmapper.JMapper;
@@ -12,6 +17,8 @@ import com.jc.sgtasec.web.dto.TurnoDto;
 @Service
 public class TurnoServiceImpl implements ITurnoService {
 	
+	private Logger logger = LogManager.getLogger(getClass());
+	private Authentication auth;
 	private ITurnoRepository turnoRepository;
 	private JMapper<Turno, TurnoDto> mapperToEntity;
 	private JMapper<TurnoDto, Turno> mapperToDTO;
@@ -30,6 +37,9 @@ public class TurnoServiceImpl implements ITurnoService {
 
 	@Override
 	public Turno saveTurno(Turno turno) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("saveTurno(Turno turno): " + turno.toString());	
 		return turnoRepository.save(turno);
 	}
 
@@ -40,11 +50,17 @@ public class TurnoServiceImpl implements ITurnoService {
 
 	@Override
 	public Turno updateTurno(Turno turno) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("updateTurno(Turno turno): " + turno.toString());	
 		return turnoRepository.save(turno);
 	}
 
 	@Override
 	public void deleteTurnoById(Long id) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("deleteTurnoById(Long id): " + id);
 		turnoRepository.deleteById(id);
 	}
 

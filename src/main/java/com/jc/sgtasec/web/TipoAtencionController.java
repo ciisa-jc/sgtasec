@@ -3,8 +3,13 @@ package com.jc.sgtasec.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +21,7 @@ import com.jc.sgtasec.web.dto.TipoAtencionDto;
 @Controller
 public class TipoAtencionController {
 
+	private Logger logger = LogManager.getLogger(getClass());
 	private ITipoAtencionService tipoAtencionService;
 
 	public TipoAtencionController(ITipoAtencionService tipoAtencionService) {
@@ -26,11 +32,11 @@ public class TipoAtencionController {
 	@GetMapping("/tipo_atencion")
 	public String listTipoAtencion(Model model) {
 		List<TipoAtencionDto> listTipoAtencionDto = new ArrayList<TipoAtencionDto>();
-		
+
 		for (TipoAtencion tipoAtencion : tipoAtencionService.getAllTipoAtencions()) {
 			listTipoAtencionDto.add(tipoAtencionService.mapperToDTO(tipoAtencion));
 		}
-				
+
 		model.addAttribute("tipo_atenciones", listTipoAtencionDto);
 		return "tipo_atencion/tipo_atenciones";
 	}
@@ -43,37 +49,80 @@ public class TipoAtencionController {
 	}
 
 	@PostMapping("/tipo_atencion")
-	public String saveTipoAtencion(@ModelAttribute("tipoAtencion") TipoAtencionDto tipoAtencionDto) {
-		
-		TipoAtencion tipoAtencion = tipoAtencionService.mapperToEntity(tipoAtencionDto);
+	public String saveTipoAtencion(@ModelAttribute("tipoAtencion") @Valid TipoAtencionDto tipoAtencionDto,
+			BindingResult result, Model model) {
+		try {
 
-		tipoAtencionService.saveTipoAtencion(tipoAtencion);
-		return "redirect:/tipo_atencion";
+			if (result.hasErrors()) {
+				return "tipo_atencion/crear_tipo_atencion";
+			}
+
+			TipoAtencion tipoAtencion = tipoAtencionService.mapperToEntity(tipoAtencionDto);
+			tipoAtencionService.saveTipoAtencion(tipoAtencion);
+			return "redirect:/tipo_atencion";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@GetMapping("/tipo_atencion/editar/{id}")
 	public String editTipoAtencionForm(@PathVariable Long id, Model model) {
-		TipoAtencionDto tipoAtencionDto = tipoAtencionService.mapperToDTO(tipoAtencionService.getTipoAtencionById(id));
-		
-		model.addAttribute("tipoAtencion", tipoAtencionDto);
-		return "tipo_atencion/editar_tipo_atencion";
+		try {
+
+			TipoAtencionDto tipoAtencionDto = tipoAtencionService
+					.mapperToDTO(tipoAtencionService.getTipoAtencionById(id));
+			model.addAttribute("tipoAtencion", tipoAtencionDto);
+			return "tipo_atencion/editar_tipo_atencion";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@PostMapping("/tipo_atencion/{id}")
-	public String updateTipoAtencion(@PathVariable Long id, @ModelAttribute("tipo_atencion") TipoAtencionDto tipoAtencionDto, Model model) {
+	public String updateTipoAtencion(@PathVariable Long id,
+			@ModelAttribute("tipoAtencion") @Valid TipoAtencionDto tipoAtencionDto, BindingResult result,
+			Model model) {
+		System.out.println("Long id: " + id);
+		
+		try {
 
-		// get from database by id
-		TipoAtencion existingTipoAtencion = tipoAtencionService.getTipoAtencionById(id);
-		existingTipoAtencion.setNombre(tipoAtencionDto.getNombre());
-		existingTipoAtencion.setTiempoAtencion(tipoAtencionDto.getTiempoAtencion());		
-		// save updated object
-		tipoAtencionService.updateTipoAtencion(existingTipoAtencion);
-		return "redirect:/tipo_atencion";
+			if (result.hasErrors()) {
+				System.out.println("result.hasErrors: " + id);
+				
+				return "tipo_atencion/editar_tipo_atencion";
+			}
+
+			// get from database by id
+			TipoAtencion existingTipoAtencion = tipoAtencionService.getTipoAtencionById(id);
+			existingTipoAtencion.setNombre(tipoAtencionDto.getNombre());
+			existingTipoAtencion.setTiempoAtencion(tipoAtencionDto.getTiempoAtencion());
+			// save updated object
+			tipoAtencionService.updateTipoAtencion(existingTipoAtencion);
+			return "redirect:/tipo_atencion";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 
 	@GetMapping("/tipo_atencion/{id}")
-	public String deleteTipoAtencion(@PathVariable Long id) {
-		tipoAtencionService.deleteTipoAtencionById(id);
-		return "redirect:/tipo_atencion";
+	public String deleteTipoAtencion(@PathVariable Long id, Model model) {
+		try {
+			tipoAtencionService.deleteTipoAtencionById(id);
+			return "redirect:/tipo_atencion";
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
 	}
 }

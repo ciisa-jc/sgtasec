@@ -22,7 +22,7 @@ public class Turno {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "turno_atencion", nullable = false)
+	@Column(name = "turno_atencion", nullable = false, length = 50)
 	private String turnoAtencion;
 	private int estado;
 }

@@ -1,6 +1,9 @@
 package com.jc.sgtasec.web.dto;
 
 import java.time.LocalDateTime;
+
+import javax.validation.constraints.Max;
+
 import com.googlecode.jmapper.annotations.JGlobalMap;
 import com.jc.sgtasec.model.Cliente;
 import com.jc.sgtasec.model.TipoAtencion;
@@ -18,7 +21,8 @@ public class AtencionDto {
 	private Long id;
 	private Turno turno;
 	private Cliente cliente;
-	private TipoAtencion tipoAtencion;
+	private TipoAtencion tipoAtencion;	
+	@Max(value = 3, message = "{Max.AtencionDto.contadorLlamados}")
 	private long contadorLlamados;
 	private LocalDateTime fechaCreacion;	
 	private LocalDateTime fechaCreacionLlamada;	

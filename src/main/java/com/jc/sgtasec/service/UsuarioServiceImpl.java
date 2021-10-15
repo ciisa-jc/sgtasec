@@ -6,9 +6,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,13 +28,15 @@ import com.jc.sgtasec.web.dto.UsuarioDto;
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
 
+	private Logger logger = LogManager.getLogger(getClass());
+	private Authentication auth;
 	private IUsuarioRepository usuarioRepository;
 	private JMapper<Usuario, UsuarioDto> mapperToEntity;
 	private JMapper<UsuarioDto, Usuario> mapperToDTO;
 
 	@Autowired
 	private EmailSenderService senderService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -43,10 +49,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public Usuario save(UsuarioDto usuarioDto) {
+		
 		Usuario usuario = new Usuario(usuarioDto.getNombre(), usuarioDto.getApellidoPaterno(),
 				usuarioDto.getApellidoMaterno(), usuarioDto.getEmail(),
 				passwordEncoder.encode(usuarioDto.getPassword()), usuarioDto.getRut(),
 				Arrays.asList(new Rol("USER_ROLE")));
+		
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("save(UsuarioDto usuarioDto): " + usuarioDto.toString());	
 
 		return usuarioRepository.save(usuario);
 	}
@@ -67,23 +78,28 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public boolean recoveryAcces(UsuarioDto usuarioDto) {
-				
+
 		Usuario usuario = usuarioRepository.findByEmail(usuarioDto.getEmail());
-		
+
 		if (usuario == null) {
 			return false;
 		}
 
 		PasswordGenerator passwordGenerator = new PasswordGenerator();
 		String password = passwordGenerator.nextPassword();
-		String mensaje = "El usuario "+ usuarioDto.getEmail() +" a solicitado la recuperación de acceso al sistema SGTA.\r\n";
-		mensaje += "Puede ingresar con la siguiente clave provisoria: " + password  + 
-				"\r\n Recuerde modificar posteriormente esta clave provisoria.";
+		String mensaje = "El usuario " + usuarioDto.getEmail()
+				+ " a solicitado la recuperación de acceso al sistema SGTA.\r\n";
+		mensaje += "Puede ingresar con la siguiente clave provisoria: " + password
+				+ "\r\n Recuerde modificar posteriormente esta clave provisoria.";
 		senderService.sendEmail(usuarioDto.getEmail(), "SGTA solicitud de recuperación de contraseña", mensaje);
-			
+
 		usuario.setPassword(passwordEncoder.encode(password));
-		resetPassword(usuario);		
+		resetPassword(usuario);
 		
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("recoveryAcces(UsuarioDto usuarioDto): " + usuarioDto.toString());	
+
 		return true;
 	}
 
@@ -91,27 +107,26 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public Usuario resetPassword(Usuario usuario) {
 		return usuarioRepository.save(usuario);
 	}
-	
-	
-	// método para saber si un usuario a eliminar o editar es ADMINISTRADOR, para evitar la modificación
-	
+
+	// método para saber si un usuario a eliminar o editar es ADMINISTRADOR, para
+	// evitar la modificación
+
 	@Override
 	public boolean esUsuarioAdministrador(Long id) {
-		
-		Usuario usuario =usuarioRepository.findById(id).get();
+
+		Usuario usuario = usuarioRepository.findById(id).get();
 		boolean esAdmin = false;
-		 
-		 for (Rol rol : usuario.getRoles()) {
-			 
-			 if(rol.getName().equalsIgnoreCase("ADMIN_ROLE")) {
-				 esAdmin = true;
-			 } 		
+
+		for (Rol rol : usuario.getRoles()) {
+
+			if (rol.getName().equalsIgnoreCase("ADMIN_ROLE")) {
+				esAdmin = true;
+			}
 		}
-		 
-		 return esAdmin;
+
+		return esAdmin;
 	}
-		
-	
+
 	// crud
 
 	@Override
@@ -121,6 +136,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public Usuario saveUsuario(Usuario usuario) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("saveUsuario(Usuario usuario): " + usuario.toString());	
 		return usuarioRepository.save(usuario);
 	}
 
@@ -131,32 +149,38 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public Usuario updateUsuario(Usuario usuario) {
-		return usuarioRepository.save(usuario);					
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("updateUsuario(Usuario usuario): " + usuario.toString());	
+		return usuarioRepository.save(usuario);
 	}
 
 	@Override
 	public void deleteUsuarioById(Long id) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("deleteUsuarioById(Long id): " + id);
 		usuarioRepository.deleteById(id);
 	}
 
 	@Override
 	public Usuario mapperToEntity(UsuarioDto source) {
 		Usuario usuario = new Usuario();
-		usuario = mapperToEntity.getDestination(source);		
+		usuario = mapperToEntity.getDestination(source);
 		return usuario;
 	}
 
 	@Override
 	public UsuarioDto mapperToDTO(Usuario source) {
 		UsuarioDto usuarioDto = new UsuarioDto();
-		usuarioDto = mapperToDTO.getDestination(source);		
+		usuarioDto = mapperToDTO.getDestination(source);
 		return usuarioDto;
 	}
 
 	@Override
 	public List<UsuarioDto> getListDTO(List<Usuario> lista) {
 		List<UsuarioDto> listDTO = new ArrayList<UsuarioDto>();
-		
+
 		for (Usuario usuario : getAllUsuarios()) {
 			listDTO.add(mapperToDTO(usuario));
 		}

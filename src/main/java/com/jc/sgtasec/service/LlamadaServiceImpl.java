@@ -40,8 +40,7 @@ public class LlamadaServiceImpl implements ILlamadaService {
 		
 		this.auth = SecurityContextHolder.getContext().getAuthentication();
 		logger.info("Usuario: " + auth.getName());
-		logger.info("saveLlamada(Llamada llamada): " + llamada);
-		
+		logger.info("saveLlamada(Llamada llamada): " + llamada.toString());		
 		return llamadaRepository.save(llamada);
 	}
 
@@ -52,11 +51,17 @@ public class LlamadaServiceImpl implements ILlamadaService {
 
 	@Override
 	public Llamada updateLlamada(Llamada llamada) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("updateLlamada(Llamada llamada): " + llamada.toString());	
 		return llamadaRepository.save(llamada);
 	}
 
 	@Override
 	public void deleteLlamadaById(Long id) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("deleteLlamadaById(Long id): " + id);
 		llamadaRepository.deleteById(id);		
 	}
 

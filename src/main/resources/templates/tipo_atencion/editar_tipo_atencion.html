@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <title>Administrador de Tipo Atención</title>
@@ -20,11 +21,16 @@
 							<label>Nombre</label> <input type="text" name="nombre"
 								th:field="*{nombre}" class="form-control"
 								placeholder="Ingresar Nombre" />
+							<div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+								th:errors="*{nombre}"></div>
 						</div>
 						<div class="form-group">
 							<label>Tiempo Atencion</label> <input type="text"
-								name="tiempoAtencion" th:field="*{tiempoAtencion}" class="form-control"
-								placeholder="Ingresar Tiempo Atención" />
+								name="tiempoAtencion" th:field="*{tiempoAtencion}"
+								class="form-control" placeholder="Ingresar Tiempo Atención" />
+							<div class="text-danger"
+								th:if="${#fields.hasErrors('tiempoAtencion')}"
+								th:errors="*{tiempoAtencion}"></div>
 						</div>
 						<div class="box-footer">
 							<button type="submit" class="btn btn-primary">Enviar</button>

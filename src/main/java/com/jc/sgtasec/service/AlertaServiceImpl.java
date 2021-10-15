@@ -2,6 +2,11 @@ package com.jc.sgtasec.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.jmapper.JMapper;
@@ -12,6 +17,8 @@ import com.jc.sgtasec.web.dto.AlertaDto;
 @Service
 public class AlertaServiceImpl implements IAlertaService {
 	
+	private Logger logger = LogManager.getLogger(getClass());
+	private Authentication auth;
 	private IAlertaRepository alertaRepository;
 	private JMapper<Alerta, AlertaDto> mapperToEntity;
 	private JMapper<AlertaDto, Alerta> mapperToDTO;
@@ -30,6 +37,9 @@ public class AlertaServiceImpl implements IAlertaService {
 
 	@Override
 	public Alerta saveAlerta(Alerta alerta) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("saveAlerta(Alerta alerta) " + alerta.toString());
 		return alertaRepository.save(alerta);
 	}
 
@@ -40,11 +50,17 @@ public class AlertaServiceImpl implements IAlertaService {
 
 	@Override
 	public Alerta updateAlerta(Alerta alerta) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("updateAlerta(Alerta alerta) " + alerta.toString());
 		return alertaRepository.save(alerta);
 	}
 
 	@Override
 	public void deleteAlertaById(Long id) {
+		this.auth = SecurityContextHolder.getContext().getAuthentication();
+		logger.info("Usuario: " + auth.getName());
+		logger.info("deleteAlertaById(Long id) " + id);
 		alertaRepository.deleteById(id);		
 	}
 

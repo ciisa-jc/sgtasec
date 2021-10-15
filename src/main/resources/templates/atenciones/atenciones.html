@@ -41,7 +41,7 @@
 					<td th:text="${atencion.turno.getTurnoAtencion()}"></td>
 					<div th:switch="${atencion.turno.getEstado()}">
 						<td th:case="1">Asignado</td>
-						<td th:case="2">En atención</td>
+						<td th:case="2">Atendiendo</td>
 						<td th:case="3">Finalizado</td>
 						<td th:case="4">Descartado</td>
 					</div>
@@ -55,13 +55,13 @@
 						th:text="${#temporals.format(atencion.fechaCreacion, 'dd-MM-yyyy HH:mm:ss')}">
 					</td>
 					<td th:text="${atencion.contadorLlamados}"></td>
-					<td><a th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}"
-						class="btn btn-primary btn-sm"> Llamar</a>
-						<a th:href="@{/atenciones/{id}(id=${atencion.id})}"
-						class="btn btn-danger btn-sm"> Borrar</a>
-						<a th:href="@{/atenciones/atender/{id}(id=${atencion.id})}"
-						class="btn btn-secondary btn-sm"> Atender</a>
-						</td>
+<!-- 					<td th:if="(${atencion.turno.getEstado()} == 1 OR ${atencion.turno.getEstado()} == 2)"> -->
+<td>
+						<a th:if="${atencion.contadorLlamados} < ${@environment.getProperty('cantidad.maxima.llamadas')}" th:href="@{/atenciones/llamar/{id}(id=${atencion.id})}" class="btn btn-primary btn-sm"> Llamar</a>
+						<a th:href="@{/atenciones/{id}(id=${atencion.id})}"	class="btn btn-danger btn-sm"> Borrar</a>
+						<a th:if="${atencion.turno.getEstado()} != 2" th:href="@{/atenciones/atender/{id}(id=${atencion.id})}"	class="btn btn-secondary btn-sm"> Atender</a>
+						<a th:href="@{/atenciones/finalizar/{id}(id=${atencion.id})}" class="btn btn-success btn-sm"> Finalizar</a>
+					</td>
 				</tr>
 			</tbody>
 
