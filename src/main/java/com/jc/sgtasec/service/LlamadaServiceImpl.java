@@ -99,4 +99,9 @@ public class LlamadaServiceImpl implements ILlamadaService {
 		return llamadaRepository.listaLlamadasConTurnos();
 	}
 
+	@Override
+	public void deleteByAtencion(Atencion atencion) {
+		llamadaRepository.deleteByAtencion(atencion);		
+	}
+
 }

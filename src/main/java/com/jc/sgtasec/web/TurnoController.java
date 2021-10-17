@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -59,11 +60,14 @@ public class TurnoController {
 			Turno turno = turnoService.mapperToEntity(turnoDto);
 			turnoService.saveTurno(turno);
 			return "redirect:/turnos";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -71,7 +75,6 @@ public class TurnoController {
 	public String editTurnoForm(@PathVariable Long id, Model model) {
 
 		TurnoDto turnoDto = turnoService.mapperToDTO(turnoService.getTurnoById(id));
-
 		model.addAttribute("turno", turnoDto);
 		return "turnos/editar_turno";
 	}
@@ -90,11 +93,14 @@ public class TurnoController {
 			existingTurno.setEstado(turnoDto.getEstado());
 			turnoService.updateTurno(existingTurno);
 			return "redirect:/turnos";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -103,11 +109,14 @@ public class TurnoController {
 		try {
 			turnoService.deleteTurnoById(id);
 			return "redirect:/turnos";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 

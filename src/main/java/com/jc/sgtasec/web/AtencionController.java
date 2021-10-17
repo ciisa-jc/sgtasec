@@ -8,20 +8,26 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import com.jc.sgtasec.config.CustomProperties;
 import com.jc.sgtasec.model.Atencion;
+import com.jc.sgtasec.model.HistorialAtencion;
 import com.jc.sgtasec.model.Llamada;
 import com.jc.sgtasec.model.Turno;
 import com.jc.sgtasec.service.IAtencionService;
 import com.jc.sgtasec.service.IClienteService;
+import com.jc.sgtasec.service.IHistorialAtencionService;
 import com.jc.sgtasec.service.ILlamadaService;
 import com.jc.sgtasec.service.ITipoAtencionService;
 import com.jc.sgtasec.service.ITurnoService;
@@ -42,10 +48,12 @@ public class AtencionController {
 	private ITurnoService turnoService;
 	private ILlamadaService llamadaService;
 	private IUsuarioService usuarioService;
+	private CustomProperties customProperties;
+	private IHistorialAtencionService historialAtencionService;
 
 	public AtencionController(IAtencionService atencionService, IClienteService clienteService,
 			ITipoAtencionService tipoAtencionService, ITurnoService turnoService, ILlamadaService llamadaService,
-			IUsuarioService usuarioService) {
+			IUsuarioService usuarioService, CustomProperties customProperties, IHistorialAtencionService historialAtencionService) {
 		super();
 		this.atencionService = atencionService;
 		this.clienteService = clienteService;
@@ -53,6 +61,8 @@ public class AtencionController {
 		this.turnoService = turnoService;
 		this.llamadaService = llamadaService;
 		this.usuarioService = usuarioService;
+		this.customProperties = customProperties;
+		this.historialAtencionService = historialAtencionService;
 	}
 
 	@GetMapping("/atenciones")
@@ -98,11 +108,14 @@ public class AtencionController {
 			turno.setEstado(1);
 			turnoService.saveTurno(turno);
 			return "redirect:/atenciones";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -126,31 +139,43 @@ public class AtencionController {
 
 			atencionService.deleteAtencionById(id);
 			return "redirect:/atenciones";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
 	@GetMapping("/atenciones/llamar/{id}")
 	public String realizarLlamadoParaAtencion(@PathVariable Long id, Model model) {
 		try {
+
 			Atencion existingAtencion = atencionService.getAtencionById(id);
+			Long cantidad = customProperties.getCantidadMaximaLlamadas();
+			List<Llamada> llamadas = llamadaService.findByAtencion(existingAtencion);
 
-			Llamada llamada = new Llamada();
-			llamada.setFechaCreacion(LocalDateTime.now());
-			llamada.setAtencion(existingAtencion);
-			this.auth = SecurityContextHolder.getContext().getAuthentication();
-			llamada.setUsuario(usuarioService.getUsuarioByEmail(auth.getName()));
-			llamadaService.saveLlamada(llamada);
+			if (llamadas.size() < cantidad) {
+				Llamada llamada = new Llamada();
+				llamada.setFechaCreacion(LocalDateTime.now());
+				llamada.setAtencion(existingAtencion);
+				this.auth = SecurityContextHolder.getContext().getAuthentication();
+				llamada.setUsuario(usuarioService.getUsuarioByEmail(auth.getName()));
+				llamadaService.saveLlamada(llamada);
+			}
+
 			return "redirect:/atenciones";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -167,10 +192,14 @@ public class AtencionController {
 			turnoService.saveTurno(turno);
 
 			return "redirect:/atenciones";
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -178,7 +207,7 @@ public class AtencionController {
 	public String finalizarAtencion(@PathVariable Long id, Model model) {
 
 		try {
-			
+
 			Atencion existingAtencion = atencionService.getAtencionById(id);
 
 			Turno turno = turnoService.getTurnoById(existingAtencion.getTurno().getId());
@@ -187,10 +216,59 @@ public class AtencionController {
 			turnoService.saveTurno(turno);
 
 			return "redirect:/atenciones";
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
+		}
+	}
+
+	@GetMapping("/atenciones/archivar/{id}")
+	 @Transactional
+	public String archivarAtencion(@PathVariable Long id, Model model) {
+
+		try {
+			Atencion existingAtencion = atencionService.getAtencionById(id);
+		
+			// guardar en historial la atención 
+			HistorialAtencion historialAtencion = new HistorialAtencion();
+			
+			historialAtencion.setIdAtencion(existingAtencion.getId());
+			historialAtencion.setFechaCreacionAtencion(existingAtencion.getFechaCreacion());
+			historialAtencion.setApellidoPaternoCliente(existingAtencion.getCliente().getApellidoPaterno());
+			historialAtencion.setApellidoMaternoCliente(existingAtencion.getCliente().getApellidoMaterno());
+			historialAtencion.setNombreCliente(existingAtencion.getCliente().getNombre());
+			historialAtencion.setEmailCliente(existingAtencion.getCliente().getEmail());
+			historialAtencion.setRutCliente(existingAtencion.getCliente().getRut());
+			historialAtencion.setNombreTipoAtencion(existingAtencion.getTipoAtencion().getNombre());
+			historialAtencion.setTiempoAtencion(existingAtencion.getTipoAtencion().getTiempoAtencion());
+			historialAtencion.setTurnoAtencion(existingAtencion.getTurno().getTurnoAtencion());
+						
+			List<Llamada> llamadas = llamadaService.findByAtencion(existingAtencion);
+			logger.info("llamada.getFechaCreacion: " + llamadas);
+
+			for (Llamada llamada : llamadas) {
+				
+				historialAtencion.setFechaCreacionLlamada(llamada.getFechaCreacion());
+			}			
+			
+			historialAtencionService.saveHistorialAtencion(historialAtencion);
+			llamadaService.deleteByAtencion(existingAtencion);
+			atencionService.deleteAtencionById(id);
+
+			return "redirect:/atenciones";
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			model.addAttribute("error", e.getMessage());
+			return "error/error";
 		}
 	}
 

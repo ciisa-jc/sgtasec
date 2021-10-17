@@ -22,7 +22,7 @@
 		<th> Apellido Materno</th>
 		<th> Email</th>
 		<th> Rut</th>
-		<th>Acciones</th>		
+		<th  sec:authorize="hasAuthority('ADMIN_ROLE')">Acciones</th>		
 	</tr>
 	</thead>
 	
@@ -33,7 +33,7 @@
 		<td th:text="${usuario.apellidoMaterno}"> </td>
 		<td th:text="${usuario.email}"> </td>
 		<td th:text="${usuario.rut}"> </td>
-		<td>
+		<td sec:authorize="hasAuthority('ADMIN_ROLE')">
 			<a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" 
 			class="btn btn-primary btn-sm">Actualizar </a>
 			 

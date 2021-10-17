@@ -21,6 +21,8 @@ public interface ILlamadaService {
 	Llamada updateLlamada(Llamada llamada);
 
 	void deleteLlamadaById(Long id);
+	
+	void deleteByAtencion(Atencion atencion);
 					
 	Llamada mapperToEntity(LlamadaDto source);
 	

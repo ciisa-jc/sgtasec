@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import com.jc.sgtasec.model.Llamada;
 import com.jc.sgtasec.service.ILlamadaService;
 import com.jc.sgtasec.web.dto.LlamadaDto;
@@ -19,7 +21,7 @@ import com.jc.sgtasec.web.dto.LlamadaDto;
 public class LlamadaController {
 
 	private Logger logger = LogManager.getLogger(getClass());
-	private ILlamadaService llamadaService;
+	private ILlamadaService llamadaService;	
 
 	public LlamadaController(ILlamadaService llamadaService) {
 		super();
@@ -50,8 +52,9 @@ public class LlamadaController {
 
 	public void saveLlamada(Llamada llamada, Model model) {
 		try {
+			
 			llamadaService.saveLlamada(llamada);
-
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
@@ -76,11 +79,14 @@ public class LlamadaController {
 			existingLlamada.setFechaCreacion(llamadaDto.getFechaCreacion());
 			llamadaService.updateLlamada(existingLlamada);
 			return "redirect:/llamadas";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -89,11 +95,14 @@ public class LlamadaController {
 		try {
 			llamadaService.deleteLlamadaById(id);
 			return "redirect:/llamadas";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 }

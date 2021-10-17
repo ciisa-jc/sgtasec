@@ -14,6 +14,8 @@ public interface ILlamadaRepository extends JpaRepository<Llamada, Long> {
 	
 	List<Llamada> findByAtencion(Atencion atencion);
 	
+	void deleteByAtencion(Atencion atencion);
+	
 	@Query(value="SELECT tu.turno_atencion turno, "
 			+ "ll.id, ll.fecha_creacion, "
 			+ "at.id id_atencion, " 

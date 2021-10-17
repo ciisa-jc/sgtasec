@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,11 +43,14 @@ public class AlertaController {
 
 			model.addAttribute("alertas", listAlertaDtos);
 			return "alertas/alertas";
-			
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -57,11 +61,14 @@ public class AlertaController {
 			AlertaDto alertaDto = new AlertaDto();
 			model.addAttribute("alerta", alertaDto);
 			return "alertas/crear_alerta";
-			
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -77,11 +84,14 @@ public class AlertaController {
 			alerta.setFechaCreacion(LocalDateTime.now());
 			alertaService.saveAlerta(alerta);
 			return "redirect:/alertas";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -92,11 +102,14 @@ public class AlertaController {
 			AlertaDto alertaDto = alertaService.mapperToDTO(alertaService.getAlertaById(id));
 			model.addAttribute("alerta", alertaDto);
 			return "alertas/editar_alerta";
-			
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -120,11 +133,14 @@ public class AlertaController {
 			// save updated Alerta object
 			alertaService.updateAlerta(existingAlerta);
 			return "redirect:/alertas";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -134,11 +150,14 @@ public class AlertaController {
 		try {
 			alertaService.deleteAlertaById(id);
 			return "redirect:/alertas";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 }

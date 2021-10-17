@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import com.jc.sgtasec.web.dto.ClienteDto;
 public class ClienteController {
 
 	private Logger logger = LogManager.getLogger(getClass());
+
 	private IClienteService clienteService;
 
 	public ClienteController(IClienteService clienteService) {
@@ -60,11 +62,14 @@ public class ClienteController {
 			Cliente cliente = clienteService.mapperToEntity(clienteDto);
 			clienteService.saveCliente(cliente);
 			return "redirect:/clientes";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -96,11 +101,14 @@ public class ClienteController {
 			// save updated Cliente object
 			clienteService.updateCliente(existingCliente);
 			return "redirect:/clientes";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
 	}
 
@@ -109,11 +117,15 @@ public class ClienteController {
 		try {
 			clienteService.deleteClienteById(id);
 			return "redirect:/clientes";
-
+		} catch (DataIntegrityViolationException ex) {
+			logger.error(ex.getMessage());
+			model.addAttribute("error", ex.getRootCause().getMessage());
+			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			model.addAttribute("error", e.getMessage());
-			return "error";
+			return "error/error";
 		}
+
 	}
 }
