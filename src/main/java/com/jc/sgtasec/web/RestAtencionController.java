@@ -53,9 +53,6 @@ public class RestAtencionController {
 			restAtencionDto.setFechaCreacion(LocalDateTime.now());
 			restAtencionDto.setCantidadMaximaLlamadas(customProperties.getCantidadMaximaLlamadas());
 			
-			//esto se debe calcular para mostar en minutso el tiempo estmado para ser atendido, por ahora va un valor 
-			//en duro de 50 minutos, para pruebas
-			
 			Long idAtencion = atencion.getId();
 			restAtencionDto.setTiempoEstimadoParaAtencion(atencionService.tiempoEstimadoParaAtencion(idAtencion));
 						

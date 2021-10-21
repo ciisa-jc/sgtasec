@@ -28,6 +28,9 @@ public class Alerta {
 	@Column(name = "color", unique = true, nullable = false, length = 50)
 	private String color;
 
+	@Column(name = "color_html", length = 50)
+	private String colorHtml;
+
 	@Column(name = "duracion_desde", nullable = false)
 	private Integer duracionDesde;
 

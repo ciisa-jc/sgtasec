@@ -21,6 +21,7 @@ public class AlertaDto {
 	
 	@NotEmpty(message = "{NotEmpty.AlertaDto.color}")
 	private String color;
+	private String colorHtml;
 	@NotNull(message = "{NotNull.AlertaDto.duracionDesde}")
 	private Integer duracionDesde;
 	@NotNull(message = "{NotNull.AlertaDto.duracionHasta}")

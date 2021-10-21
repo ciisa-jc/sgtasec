@@ -25,6 +25,7 @@
 			<thead class="table-dark">
 				<tr>
 					<th>Color</th>
+					<th>Color HTML</th>
 					<th>Duraci&oacute;n desde</th>
 					<th>Duraci&oacute;n hasta</th>
 					<th>Descripci&oacute;n</th>
@@ -36,6 +37,7 @@
 			<tbody>
 				<tr th:each="alerta: ${alertas}">
 					<td th:text="${alerta.color}"></td>
+					<td th:text="${alerta.colorHtml}"></td>
 					<td th:text="${alerta.duracionDesde}"></td>
 					<td th:text="${alerta.duracionHasta}"></td>
 					<td th:text="${alerta.descripcion}"></td>

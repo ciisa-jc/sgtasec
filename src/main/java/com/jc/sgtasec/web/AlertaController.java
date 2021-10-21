@@ -125,6 +125,7 @@ public class AlertaController {
 			Alerta existingAlerta = alertaService.getAlertaById(id);
 			// existingAlerta.setId(id);
 			existingAlerta.setColor(alertaDto.getColor());
+			existingAlerta.setColorHtml(alertaDto.getColorHtml());
 			existingAlerta.setDuracionDesde(alertaDto.getDuracionDesde());
 			existingAlerta.setDuracionHasta(alertaDto.getDuracionHasta());
 			existingAlerta.setDescripcion(alertaDto.getDescripcion());
