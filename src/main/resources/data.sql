@@ -32,6 +32,8 @@ LEFT JOIN turnos tu ON  at.id_turno=tu.id
 LEFT JOIN llamadas lla ON at.id=lla.id_atencion
 ORDER BY at.fecha_creacion, lla.fecha_creacion; 
 
+
+
 TRUNCATE TABLE public.llamadas CASCADE;
 
 TRUNCATE TABLE public.atenciones CASCADE;
@@ -65,12 +67,11 @@ INSERT INTO public.clientes (Nombre, Apellido_Paterno, Apellido_Materno, Email, 
 
 --------- cargar alertas
 -- la alerta debiera aparecer a partir desde que se alcanzo una cantidad de minutos
-INSERT INTO alertas (color, descripcion, duracion_desde, duracion_hasta, fecha_creacion) VALUES 
-('verde', 'Falta bastante tiempo, para su atención.', 30, 600, CURRENT_TIMESTAMP),
-('amarillo', 'Atento su turno de atención está próximo a ser llamado.', 11, 29, CURRENT_TIMESTAMP),
-('naranjo', 'Su turno de atención está a punto de ser llamado.', 5, 10, CURRENT_TIMESTAMP),
-('marron', 'Su turno de atención está siendo llamado.', 3, 4, CURRENT_TIMESTAMP),
-('rojo', 'Su turno de atención está próximo a expirar.', 1, 2, CURRENT_TIMESTAMP);
+INSERT INTO alertas (color, color_html, descripcion, duracion_desde, duracion_hasta, fecha_creacion) VALUES 
+('verde', '#66CC33', 'Falta bastante tiempo, para su atención.', 30, 600, CURRENT_TIMESTAMP),
+('amarillo', '#FFFF33', 'Atento su turno de atención está próximo a ser llamado.', 11, 29, CURRENT_TIMESTAMP),
+('naranjo', '#FFC300', 'Su turno de atención está a punto de ser llamado.', 5, 10, CURRENT_TIMESTAMP),
+('rojo', '#CC0000', 'Su turno de atención está próximo a expirar.', 1, 4, CURRENT_TIMESTAMP);
 
 -- registrar turnos de atención
 INSERT INTO public.turnos (estado, turno_atencion) VALUES   

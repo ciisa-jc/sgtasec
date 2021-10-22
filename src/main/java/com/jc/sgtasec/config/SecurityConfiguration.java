@@ -44,6 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/registro**",
 				"/recuperar**",
 				"/api/atenciones/**",
+				"/stomp-endpoint/**",
+				"/hello/**",
 				"/js/**",
 				"/css/**",
 				"/img/**",
