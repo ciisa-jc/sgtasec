@@ -46,7 +46,7 @@ public class WSController {
 	}
 	
 
-	@MessageMapping("/hello")
+	@MessageMapping("/atencion")
 	@SendTo("/topic/greetings")
 	public RestAtencionDto getAtencionByEmail(@Payload String email) {	
 //		logger.debug("getAtencionByEmail(@Payload String email) : " + email);
