@@ -14,7 +14,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 //		registry.addEndpoint("/stomp-endpoint").withSockJS();
 //		registry.addEndpoint("/stomp-endpoint").setAllowedOrigins("http://localhost:9090").withSockJS();
-		registry.addEndpoint("/stomp-endpoint").setAllowedOrigins("*").withSockJS();
+		registry.addEndpoint("/stomp-endpoint").setAllowedOrigins("https://sgtaapp.herokuapp.com").withSockJS();
 	}
 
 	@Override
