@@ -8,6 +8,7 @@ import com.jc.sgtasec.web.dto.ClienteDto;
 public interface IClienteService {
 
 	List<Cliente> getAllClientes();
+	
 
 	Cliente saveCliente(Cliente cliente);
 
@@ -22,4 +23,6 @@ public interface IClienteService {
 	ClienteDto mapperToDTO(Cliente source);
 	
 	List<ClienteDto> getListClientesDTO(List<Cliente> lista);
+	
+	List<ClienteDto> getAllClientesDtoSinTurnoActivo();
 }

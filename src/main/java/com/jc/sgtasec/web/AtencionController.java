@@ -8,7 +8,9 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -50,7 +52,10 @@ public class AtencionController {
 	private IUsuarioService usuarioService;
 	private CustomProperties customProperties;
 	private IHistorialAtencionService historialAtencionService;
-
+	
+	@Autowired
+	private SimpMessagingTemplate webSocket;
+	
 	public AtencionController(IAtencionService atencionService, IClienteService clienteService,
 			ITipoAtencionService tipoAtencionService, ITurnoService turnoService, ILlamadaService llamadaService,
 			IUsuarioService usuarioService, CustomProperties customProperties, IHistorialAtencionService historialAtencionService) {
@@ -80,7 +85,7 @@ public class AtencionController {
 	@GetMapping("/atenciones/nuevo")
 	public String createAtencionForm(Model model) {
 		AtencionDto atencionDto = new AtencionDto();
-		List<ClienteDto> listClientesDto = clienteService.getListClientesDTO(clienteService.getAllClientes());
+		List<ClienteDto> listClientesDto = clienteService.getAllClientesDtoSinTurnoActivo();
 		List<TipoAtencionDto> listTipoAtencionDto = tipoAtencionService
 				.getListTipoAtencionDTO(tipoAtencionService.getAllTipoAtencions());
 		model.addAttribute("atencion", atencionDto);
@@ -103,10 +108,20 @@ public class AtencionController {
 			atencionDto.setFechaCreacion(LocalDateTime.now());
 			Atencion atencion = atencionService.mapperToEntity(atencionDto);
 			atencionService.saveAtencion(atencion);
-			// Marcar el turno 1 En atención, -- 0 TURNO DISPONIBLE, 1 TURNO EN ATENCIÓN, 2
-			// TURNO ATENDIDO
+			/*			
+			* Estado Turno 			
+			* 0 Disponible, Turno disponible para asignar a una atención.
+			* 1 Asignado, Turno asignado a una atención.
+			* 2 En atención, Turno siendo atendido. 
+			* 3 Finalizado, Turno con cuya atención finalizo.
+			* 4 Descartado, Turno descartado de los pendientes para atender.
+			*/
 			turno.setEstado(1);
 			turnoService.saveTurno(turno);
+			
+			// webSocket avisar cambios a cliente en método saveAtencion
+			webSocket.convertAndSend("/topic/greetings", new String("email_vacio"));
+			
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
@@ -133,11 +148,22 @@ public class AtencionController {
 			}
 
 			Turno turno = turnoService.getTurnoById(existingAtencion.getTurno().getId());
-			// 4 = Descartado
+			/*			
+			* Estado Turno 			
+			* 0 Disponible, Turno disponible para asignar a una atención.
+			* 1 Asignado, Turno asignado a una atención.
+			* 2 En atención, Turno siendo atendido. 
+			* 3 Finalizado, Turno con cuya atención finalizo.
+			* 4 Descartado, Turno descartado de los pendientes para atender.
+			*/
 			turno.setEstado(4);
 			turnoService.saveTurno(turno);
 
 			atencionService.deleteAtencionById(id);
+			
+			// webSocket avisar cambios a cliente en método deleteAtencion
+			webSocket.convertAndSend("/topic/greetings", new String("email_vacio"));
+			
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
@@ -166,6 +192,9 @@ public class AtencionController {
 				llamada.setUsuario(usuarioService.getUsuarioByEmail(auth.getName()));
 				llamadaService.saveLlamada(llamada);
 			}
+			
+			// webSocket avisar cambios a cliente en método realizarLlamadoParaAtencion
+			webSocket.convertAndSend("/topic/greetings", new String("email_vacio"));
 
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
@@ -187,9 +216,19 @@ public class AtencionController {
 			Atencion existingAtencion = atencionService.getAtencionById(id);
 
 			Turno turno = turnoService.getTurnoById(existingAtencion.getTurno().getId());
-			// 2 = En atención
+			/*			
+			* Estado Turno 			
+			* 0 Disponible, Turno disponible para asignar a una atención.
+			* 1 Asignado, Turno asignado a una atención.
+			* 2 En atención, Turno siendo atendido. 
+			* 3 Finalizado, Turno con cuya atención finalizo.
+			* 4 Descartado, Turno descartado de los pendientes para atender.
+			*/
 			turno.setEstado(2);
 			turnoService.saveTurno(turno);
+			
+			// webSocket avisar cambios a cliente en método realizarAccionAtenderParaUnaAtencion
+			webSocket.convertAndSend("/topic/greetings", new String("email_vacio"));
 
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
@@ -211,10 +250,20 @@ public class AtencionController {
 			Atencion existingAtencion = atencionService.getAtencionById(id);
 
 			Turno turno = turnoService.getTurnoById(existingAtencion.getTurno().getId());
-			// 3 = Finalizar
+			/*			
+			* Estado Turno 			
+			* 0 Disponible, Turno disponible para asignar a una atención.
+			* 1 Asignado, Turno asignado a una atención.
+			* 2 En atención, Turno siendo atendido. 
+			* 3 Finalizado, Turno con cuya atención finalizo.
+			* 4 Descartado, Turno descartado de los pendientes para atender.
+			*/
 			turno.setEstado(3);
 			turnoService.saveTurno(turno);
 
+			// webSocket avisar cambios a cliente en método finalizarAtencion
+			webSocket.convertAndSend("/topic/greetings", new String("email_vacio"));
+			
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());

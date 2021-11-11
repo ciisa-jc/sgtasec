@@ -34,6 +34,7 @@ public class ClienteServiceImpl implements IClienteService {
 	public List<Cliente> getAllClientes() {
 		return clienteRepository.findAll();
 	}
+	
 
 	@Override
 	public Cliente saveCliente(Cliente cliente) {
@@ -84,6 +85,16 @@ public class ClienteServiceImpl implements IClienteService {
 		List<ClienteDto> listDTO = new ArrayList<ClienteDto>();
 		
 		for (Cliente cliente : getAllClientes()) {
+			listDTO.add(mapperToDTO(cliente));
+		}
+		return listDTO;
+	}
+
+	@Override
+	public List<ClienteDto> getAllClientesDtoSinTurnoActivo() {
+		List<ClienteDto> listDTO = new ArrayList<ClienteDto>();
+		
+		for (Cliente cliente : clienteRepository.getAllClientesSinTurnoActivo()) {
 			listDTO.add(mapperToDTO(cliente));
 		}
 		return listDTO;

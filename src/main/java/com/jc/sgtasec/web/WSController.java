@@ -49,7 +49,13 @@ public class WSController {
 	@MessageMapping("/atencion")
 	@SendTo("/topic/greetings")
 	public RestAtencionDto getAtencionByEmail(@Payload String email) {	
-//		logger.debug("getAtencionByEmail(@Payload String email) : " + email);
+		RestAtencionDto restAtencionDto = new RestAtencionDto();	
+		
+		if (email.equalsIgnoreCase("email_vacio")) {
+			restAtencionDto.setEmailRecibido(email);
+			return restAtencionDto;
+		}
+		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		EmailDto emailDto = new EmailDto();
@@ -67,7 +73,7 @@ public class WSController {
 		}
 		
 		
-		RestAtencionDto restAtencionDto = new RestAtencionDto();				
+			
 		Collection<Alerta> alertas = new ArrayList<Alerta>();
 		restAtencionDto.setEmailRecibido(emailDto.getEmail());		
 		Atencion atencion = atencionService.findByClienteEmail(emailDto.getEmail());
@@ -91,5 +97,7 @@ public class WSController {
 		}
 		
 		return restAtencionDto;
-	}		
+	}
+	
+	
 }
