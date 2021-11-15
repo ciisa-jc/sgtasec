@@ -21,14 +21,14 @@
 						<div class="form-group">
 							<label>Nombre</label> <input type="text" name="nombre"
 								th:field="*{nombre}" class="form-control"
-								placeholder="Ingresar Nombre" />
+								placeholder="Ingresar Nombre" maxlength="50" required />
 							<div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
 								th:errors="*{nombre}"></div>
 						</div>
 						<div class="form-group">
 							<label>Tiempo Atención</label> <input type="text"
 								name="tiempoAtencion" th:field="*{tiempoAtencion}"
-								class="form-control" placeholder="Ingresar Tiempo Atención" />
+								class="form-control" placeholder="Ingresar Tiempo Atención"  maxlength="2" required />
 							<div class="text-danger"
 								th:if="${#fields.hasErrors('tiempoAtencion')}"
 								th:errors="*{tiempoAtencion}"></div>
