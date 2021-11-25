@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.jc.sgtasec.model.TipoAtencion;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.ITipoAtencionService;
 import com.jc.sgtasec.web.dto.TipoAtencionDto;
 
@@ -24,10 +25,12 @@ public class TipoAtencionController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private ITipoAtencionService tipoAtencionService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public TipoAtencionController(ITipoAtencionService tipoAtencionService) {
+	public TipoAtencionController(ITipoAtencionService tipoAtencionService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.tipoAtencionService = tipoAtencionService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/tipo_atencion")
@@ -63,11 +66,11 @@ public class TipoAtencionController {
 			return "redirect:/tipo_atencion";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/tipo_atencion"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/tipo_atencion"));
 			return "error/error";
 		}
 	}
@@ -82,11 +85,11 @@ public class TipoAtencionController {
 			return "tipo_atencion/editar_tipo_atencion";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/tipo_atencion"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/tipo_atencion"));
 			return "error/error";
 		}
 	}
@@ -113,11 +116,11 @@ public class TipoAtencionController {
 			return "redirect:/tipo_atencion";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/tipo_atencion"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/tipo_atencion"));
 			return "error/error";
 		}
 	}
@@ -129,11 +132,11 @@ public class TipoAtencionController {
 			return "redirect:/tipo_atencion";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/tipo_atencion"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/tipo_atencion"));
 			return "error/error";
 		}
 	}

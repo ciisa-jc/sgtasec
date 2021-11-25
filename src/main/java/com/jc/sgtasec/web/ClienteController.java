@@ -2,9 +2,7 @@ package com.jc.sgtasec.web;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.jc.sgtasec.model.Cliente;
 import com.jc.sgtasec.service.IClienteService;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.web.dto.ClienteDto;
 
 @Controller
@@ -25,10 +24,12 @@ public class ClienteController {
 	private Logger logger = LogManager.getLogger(getClass());
 
 	private IClienteService clienteService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public ClienteController(IClienteService clienteService) {
+	public ClienteController(IClienteService clienteService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.clienteService = clienteService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/clientes")
@@ -64,11 +65,11 @@ public class ClienteController {
 			return "redirect:/clientes";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/clientes"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/clientes"));
 			return "error/error";
 		}
 	}
@@ -103,11 +104,11 @@ public class ClienteController {
 			return "redirect:/clientes";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/clientes"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/clientes"));
 			return "error/error";
 		}
 	}
@@ -119,13 +120,12 @@ public class ClienteController {
 			return "redirect:/clientes";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/clientes"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/clientes"));
 			return "error/error";
 		}
-
 	}
 }

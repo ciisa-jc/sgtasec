@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.IUsuarioService;
 import com.jc.sgtasec.web.dto.UsuarioDto;
 
@@ -19,10 +20,12 @@ public class UsuarioRegistrationController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private IUsuarioService usuarioService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public UsuarioRegistrationController(IUsuarioService usuarioService) {
+	public UsuarioRegistrationController(IUsuarioService usuarioService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.usuarioService = usuarioService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@ModelAttribute("usuario")
@@ -42,11 +45,11 @@ public class UsuarioRegistrationController {
 			return "redirect:/registro?success";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/registro"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/registro"));
 			return "error/error";
 		}
 	}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.jc.sgtasec.model.Turno;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.ITurnoService;
 import com.jc.sgtasec.web.dto.TurnoDto;
 
@@ -24,10 +25,12 @@ public class TurnoController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private ITurnoService turnoService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public TurnoController(ITurnoService turnoService) {
+	public TurnoController(ITurnoService turnoService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.turnoService = turnoService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/turnos")
@@ -62,11 +65,11 @@ public class TurnoController {
 			return "redirect:/turnos";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/turnos"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/turnos"));
 			return "error/error";
 		}
 	}
@@ -95,11 +98,11 @@ public class TurnoController {
 			return "redirect:/turnos";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/turnos"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/turnos"));
 			return "error/error";
 		}
 	}
@@ -111,11 +114,11 @@ public class TurnoController {
 			return "redirect:/turnos";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/turnos"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/turnos"));
 			return "error/error";
 		}
 	}

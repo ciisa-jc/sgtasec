@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.jc.sgtasec.model.Usuario;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.IUsuarioService;
 import com.jc.sgtasec.web.dto.UsuarioDto;
 
@@ -24,10 +25,12 @@ public class UsuarioController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private IUsuarioService usuarioService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public UsuarioController(IUsuarioService usuarioService) {
+	public UsuarioController(IUsuarioService usuarioService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.usuarioService = usuarioService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/usuarios")
@@ -56,11 +59,11 @@ public class UsuarioController {
 			return "redirect:/usuarios";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/usuarios"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/usuarios"));
 			return "error/error";
 		}
 	}
@@ -100,11 +103,11 @@ public class UsuarioController {
 			return "redirect:/usuarios";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/usuarios"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/usuarios"));
 			return "error/error";
 		}
 	}
@@ -121,11 +124,11 @@ public class UsuarioController {
 			return "redirect:/usuarios";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/usuarios"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/usuarios"));
 			return "error/error";
 		}
 	}

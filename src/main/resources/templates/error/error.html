@@ -34,6 +34,10 @@ body {
 	width: 50%;
 	padding: 10px;
 }
+
+.info-adicional {
+ 	padding: 3px 3px 3px 0px;
+}
 </style>
 </head>
 <body>
@@ -44,8 +48,23 @@ body {
 		<div class="row">
 			<div class="col">
 				<div class="alert alert-danger mt-5" role="alert" th:if="${error}">
-					<span th:text="${error}"></span>
+					<div th:utext="${error.customizedMessage}"></div>
+					
+					<div class="info-adicional">
+						<a class="btn btn-secondary" data-toggle="collapse"
+							href="#collapseExample" role="button" aria-expanded="false"
+							aria-controls="collapseExample"> Información adicional </a>
+					</div>
+					
+					<div class="collapse" id="collapseExample">
+						<div class="card card-body" th:utext="${error.exceptionMessage}"></div>
+					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
 				<div class="alert alert-danger mt-5" role="alert"
 					th:unless="${error}">Hubo un error</div>
 			</div>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.jc.sgtasec.model.Alerta;
 import com.jc.sgtasec.service.IAlertaService;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.web.dto.AlertaDto;
 
 @Controller
@@ -25,10 +26,12 @@ public class AlertaController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private IAlertaService alertaService;
+	private IHandlerExceptionService handlerExceptionService;
 
-	public AlertaController(IAlertaService alertaService) {
+	public AlertaController(IAlertaService alertaService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.alertaService = alertaService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/alertas")
@@ -40,16 +43,11 @@ public class AlertaController {
 			for (Alerta alerta : alertaService.getAllAlertas()) {
 				listAlertaDtos.add(alertaService.mapperToDTO(alerta));
 			}
-
 			model.addAttribute("alertas", listAlertaDtos);
 			return "alertas/alertas";
-		} catch (DataIntegrityViolationException ex) {
-			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
-			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/alertas"));
 			return "error/error";
 		}
 	}
@@ -61,13 +59,9 @@ public class AlertaController {
 			AlertaDto alertaDto = new AlertaDto();
 			model.addAttribute("alerta", alertaDto);
 			return "alertas/crear_alerta";
-		} catch (DataIntegrityViolationException ex) {
-			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
-			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/alertas"));
 			return "error/error";
 		}
 	}
@@ -86,11 +80,11 @@ public class AlertaController {
 			return "redirect:/alertas";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/alertas"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/alertas"));
 			return "error/error";
 		}
 	}
@@ -104,11 +98,11 @@ public class AlertaController {
 			return "alertas/editar_alerta";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/alertas"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/alertas"));
 			return "error/error";
 		}
 	}
@@ -136,11 +130,11 @@ public class AlertaController {
 			return "redirect:/alertas";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/alertas"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/alertas"));
 			return "error/error";
 		}
 	}

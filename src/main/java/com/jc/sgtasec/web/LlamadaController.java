@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jc.sgtasec.model.Llamada;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.ILlamadaService;
 import com.jc.sgtasec.web.dto.LlamadaDto;
 
@@ -22,10 +23,12 @@ public class LlamadaController {
 
 	private Logger logger = LogManager.getLogger(getClass());
 	private ILlamadaService llamadaService;	
+	private IHandlerExceptionService handlerExceptionService;
 
-	public LlamadaController(ILlamadaService llamadaService) {
+	public LlamadaController(ILlamadaService llamadaService, IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.llamadaService = llamadaService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/llamadas")
@@ -57,7 +60,7 @@ public class LlamadaController {
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -81,11 +84,11 @@ public class LlamadaController {
 			return "redirect:/llamadas";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/llamadas"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/llamadas"));
 			return "error/error";
 		}
 	}
@@ -97,11 +100,11 @@ public class LlamadaController {
 			return "redirect:/llamadas";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/llamadas"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/llamadas"));
 			return "error/error";
 		}
 	}

@@ -29,6 +29,7 @@ import com.jc.sgtasec.model.Llamada;
 import com.jc.sgtasec.model.Turno;
 import com.jc.sgtasec.service.IAtencionService;
 import com.jc.sgtasec.service.IClienteService;
+import com.jc.sgtasec.service.IHandlerExceptionService;
 import com.jc.sgtasec.service.IHistorialAtencionService;
 import com.jc.sgtasec.service.ILlamadaService;
 import com.jc.sgtasec.service.ITipoAtencionService;
@@ -52,13 +53,15 @@ public class AtencionController {
 	private IUsuarioService usuarioService;
 	private CustomProperties customProperties;
 	private IHistorialAtencionService historialAtencionService;
+	private IHandlerExceptionService handlerExceptionService;
 	
 	@Autowired
 	private SimpMessagingTemplate webSocket;
 	
 	public AtencionController(IAtencionService atencionService, IClienteService clienteService,
 			ITipoAtencionService tipoAtencionService, ITurnoService turnoService, ILlamadaService llamadaService,
-			IUsuarioService usuarioService, CustomProperties customProperties, IHistorialAtencionService historialAtencionService) {
+			IUsuarioService usuarioService, CustomProperties customProperties, IHistorialAtencionService historialAtencionService, 
+			IHandlerExceptionService handlerExceptionService) {
 		super();
 		this.atencionService = atencionService;
 		this.clienteService = clienteService;
@@ -68,6 +71,7 @@ public class AtencionController {
 		this.usuarioService = usuarioService;
 		this.customProperties = customProperties;
 		this.historialAtencionService = historialAtencionService;
+		this.handlerExceptionService = handlerExceptionService;
 	}
 
 	@GetMapping("/atenciones")
@@ -125,11 +129,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
@@ -167,11 +171,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
@@ -199,11 +203,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
@@ -233,11 +237,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
@@ -267,11 +271,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
@@ -312,11 +316,11 @@ public class AtencionController {
 			return "redirect:/atenciones";
 		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
-			model.addAttribute("error", ex.getRootCause().getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(ex, "/atenciones"));
 			return "error/error";
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			model.addAttribute("error", e.getMessage());
+			model.addAttribute("error", handlerExceptionService.customizeException(e, "/atenciones"));
 			return "error/error";
 		}
 	}
