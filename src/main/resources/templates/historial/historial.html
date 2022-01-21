@@ -19,25 +19,29 @@
 		<thead class="table-dark">
 			<tr>
 				<th>Turno</th>
-				<th>Fecha atención</th>
 				<th>Cliente</th>
 				<th>email cliente</th>
 				<th>Tipo atención</th>
+				<th>Fecha atención</th>
 				<th>Fecha llamada</th>
+				<th>Tiempo espera para llamada</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="historial: ${historialAtenciones}">
 				<td th:text="${historial.turnoAtencion}"></td>
 				<td
-					th:text="${#temporals.format(historial.fechaCreacionAtencion, 'dd-MM-yyyy HH:mm:ss')}">
-				</td>
-				<td
 					th:text="|${historial.apellidoPaternoCliente} ${historial.apellidoMaternoCliente} ${historial.nombreCliente}|"></td>
 				<td th:text="${historial.emailCliente}"></td>
 				<td th:text="${historial.nombreTipoAtencion}"></td>
 				<td
+					th:text="${#temporals.format(historial.fechaCreacionAtencion, 'dd-MM-yyyy HH:mm:ss')}">
+				</td>
+				<td
 					th:text="${#temporals.format(historial.fechaCreacionLlamada, 'dd-MM-yyyy HH:mm:ss')}">
+				</td>
+				<td
+					th:text="${historial.tiempoEsperaParaLlamada}">
 				</td>
 			</tr>
 		</tbody>

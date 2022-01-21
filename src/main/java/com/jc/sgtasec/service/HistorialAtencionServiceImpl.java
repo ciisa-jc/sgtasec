@@ -1,5 +1,7 @@
 package com.jc.sgtasec.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +24,12 @@ public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 	private IHistorialAtencionRepository atencionRepository;
 	private JMapper<HistorialAtencion, HistorialAtencionDto> mapperToEntity;
 	private JMapper<HistorialAtencionDto, HistorialAtencion> mapperToDTO;
+	private DifferenceBetweenTwoDate differenceBetweenTwoDate;
 
-	public HistorialAtencionServiceImpl(IHistorialAtencionRepository atencionRepository) {
+	public HistorialAtencionServiceImpl(IHistorialAtencionRepository atencionRepository, DifferenceBetweenTwoDate differenceBetweenTwoDate) {
 		super();
 		this.atencionRepository = atencionRepository;
+		this.differenceBetweenTwoDate = differenceBetweenTwoDate;
 		this.mapperToEntity = new JMapper<>(HistorialAtencion.class, HistorialAtencionDto.class);
 		this.mapperToDTO = new JMapper<>(HistorialAtencionDto.class, HistorialAtencion.class);
 		
@@ -76,6 +80,13 @@ public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 	public HistorialAtencionDto mapperToDTO(HistorialAtencion source) {
 		HistorialAtencionDto historialAtencionDto = new HistorialAtencionDto();
 		historialAtencionDto = mapperToDTO.getDestination(source);
+		
+		LocalDateTime fechaCreacionAtencion = historialAtencionDto.getFechaCreacionAtencion();
+		LocalDateTime fechaCreacionLlamada = historialAtencionDto.getFechaCreacionLlamada();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formatFechaCreacionAtencion = fechaCreacionAtencion.format(formatter);
+        String formatFechaCreacionLlamada = fechaCreacionLlamada.format(formatter);		
+		historialAtencionDto.setTiempoEsperaParaLlamada(differenceBetweenTwoDate.findDifference(formatFechaCreacionAtencion, formatFechaCreacionLlamada));
 		return historialAtencionDto;
 	}
 

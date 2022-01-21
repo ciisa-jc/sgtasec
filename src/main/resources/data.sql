@@ -1,5 +1,5 @@
 -- crear historial de atenciones
-/*
+
 INSERT INTO public.historial_atenciones 
 (apellido_materno_cliente,
 apellido_paterno_cliente,
@@ -571,4 +571,3 @@ INSERT INTO public.turnos (estado, turno_atencion) VALUES
 (0,'E-98'),
 (0,'E-99');
 
-*/
