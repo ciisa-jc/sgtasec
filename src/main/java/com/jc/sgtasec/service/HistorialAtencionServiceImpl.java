@@ -84,9 +84,22 @@ public class HistorialAtencionServiceImpl implements IHistorialAtencionService {
 		LocalDateTime fechaCreacionAtencion = historialAtencionDto.getFechaCreacionAtencion();
 		LocalDateTime fechaCreacionLlamada = historialAtencionDto.getFechaCreacionLlamada();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formatFechaCreacionAtencion = fechaCreacionAtencion.format(formatter);
-        String formatFechaCreacionLlamada = fechaCreacionLlamada.format(formatter);		
-		historialAtencionDto.setTiempoEsperaParaLlamada(differenceBetweenTwoDate.findDifference(formatFechaCreacionAtencion, formatFechaCreacionLlamada));
+		String formatFechaCreacionAtencion = "";
+		String formatFechaCreacionLlamada = "";
+        
+        if(historialAtencionDto.getFechaCreacionAtencion() != null) {
+        	formatFechaCreacionAtencion = fechaCreacionAtencion.format(formatter);
+        }
+    	
+        if(historialAtencionDto.getFechaCreacionLlamada() != null) {
+        	formatFechaCreacionLlamada = fechaCreacionLlamada.format(formatter);
+        }
+
+        if((historialAtencionDto.getFechaCreacionLlamada() != null) && (historialAtencionDto.getFechaCreacionAtencion() != null)) {
+        	historialAtencionDto.setTiempoEsperaParaLlamada(differenceBetweenTwoDate.findDifference(formatFechaCreacionAtencion, formatFechaCreacionLlamada));
+        }
+		
+		
 		return historialAtencionDto;
 	}
 

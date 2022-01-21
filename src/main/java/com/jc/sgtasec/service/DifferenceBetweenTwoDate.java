@@ -18,6 +18,10 @@ import org.springframework.stereotype.Service;
 public class DifferenceBetweenTwoDate {
 	private Logger logger = LogManager.getLogger(getClass());
 
+	public DifferenceBetweenTwoDate() {
+		super();
+	}
+
 	// Function to print difference in
 	// time start_date and end_date
 	public String findDifference(String start_date, String end_date) {
